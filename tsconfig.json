@@ -14,8 +14,8 @@
 			"$lib/*": ["src/lib/*"],
 			"$demo": ["src/demo"],
 			"$demo/*": ["src/demo/*"],
-			"@peerpiper/dag-jose-proxcryptor-kit": ["src/lib"],
-			"@peerpiper/dag-jose-proxcryptor-kit/*": ["src/lib/*"],
+			"@peerpiper/dag-jose-kit": ["src/lib"],
+			"@peerpiper/dag-jose-kit/*": ["src/lib/*"],
 			"../modules/ipfs-core-0.14.0/ipfs-core.js": ["../modules/ipfs-core-0.14.0/ipfs-core.js"],
 			"@peerpiper/iframe-wallet-sdk": ["../node_modules/@peerpiper/iframe-wallet-sdk"],
 			"@douganderson444/hypns-svelte-component": [

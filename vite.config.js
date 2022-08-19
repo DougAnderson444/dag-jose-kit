@@ -6,18 +6,18 @@ const config = {
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			'@peerpiper/dag-jose-proxcryptor-kit': path.resolve('src/lib')
+			'@peerpiper/dag-jose-kit': path.resolve('src/lib')
 		}
 	},
 	// workaround for common-js issues of default export
 	// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
 	build: {
 		commonjsOptions: {
-			include: [/immortal-db/, /node_modules/]
+			include: [/immortal-db/, /node_modules/, /hypns/]
 		}
 	},
 	optimizeDeps: {
-		include: ['immortal-db']
+		include: ['immortal-db', 'hypns']
 	}
 };
 

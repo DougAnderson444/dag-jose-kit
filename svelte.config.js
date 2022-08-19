@@ -1,4 +1,6 @@
-import adapter from '@sveltejs/adapter-auto';
+// import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
+
 import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -10,7 +12,17 @@ const config = {
 	}),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			pages: 'docs',
+			assets: 'docs'
+		}),
+		prerender: {
+			default: true
+		},
+		paths: {
+			// change below to your repo name
+			base: '/dag-jose-kit' //  process.env.NODE_ENV == 'production' ? '/dag-jose-kit' : '' // /dag-jose-kit
+		},
 		alias: {
 			$demo: './src/demo'
 		}

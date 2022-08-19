@@ -13,7 +13,7 @@
 		validatePubKey,
 		hexToB64,
 		bytesFromHexString
-	} from '@peerpiper/dag-jose-proxcryptor-kit';
+	} from '@peerpiper/dag-jose-kit';
 
 	/**
 	 * You need an object that implements the Proxcryptor interface
@@ -21,7 +21,7 @@
 	 */
 	import type { handlers } from '@peerpiper/iframe-wallet-sdk';
 	import type { SvelteComponentTyped } from 'svelte/internal';
-	// import type { DagJoseCryptor } from '@peerpiper/dag-jose-proxcryptor-kit';
+	// import type { DagJoseCryptor } from '@peerpiper/dag-jose-kit';
 	import type { IPFS } from 'ipfs-core-types';
 
 	// import some demo utils
