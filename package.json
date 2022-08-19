@@ -18,7 +18,7 @@
 		"@peerpiper/web3-wallet-connector": "github:PeerPiper/web3-wallet-connector#dade9c3df0fb69fe066bd458425ee251a1ab33c4",
 		"@peerpiper/iframe-wallet-sdk": "github:PeerPiper/iframe-wallet-sdk#58ab653907c4a12c53dd0d53406c28c36b945622",
 		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/adapter-static": "^1.0.0-next.39",
+		"@sveltejs/adapter-static": "next",
 		"@sveltejs/kit": "next",
 		"autoprefixer": "^10.4.8",
 		"esbuild": "^0.14.53",
