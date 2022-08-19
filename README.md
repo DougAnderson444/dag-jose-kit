@@ -106,7 +106,7 @@ Once you have encrypted using a `joseCryptor` instance, you can use it to self d
 ## Grant Access (for someone else to see your data)
 
 ```
-await joseCryptor.grantAccess(tag: string, theirPublicKey: Uint8Array);
+await joseCryptor.grantAccess(tagNode: TagNode, theirPublicKey: Uint8Array);
 ```
 
 Grant access to a tag for someone else's public key. Their key will added to the `REKEY` list for this tag so that they can decrypt your data.
@@ -114,10 +114,10 @@ Grant access to a tag for someone else's public key. Their key will added to the
 ## Check Access (to another user's tag)
 
 ```
-await joseCryptor.checkAccess(tag: string, yourPublicKey: Uint8Array, theirPublicKey: Uint8Array);
+await joseCryptor.checkAccess(tag: string, targetPublicKey: Uint8Array, senderPubKey: Uint8Array);
 ```
 
-Check access allows you to see if your public key is on the access list for someone else's tag. Your key will need to be on their `REKEY` list in order to decrypt their data.
+Check access allows you to see if the target public key is on the sender's access list for the sender's tag. The target's public key will need to be on their `REKEY` list in order for them to decrypt the sender's data.
 
 ## Decrypt someone else's Tag data
 
@@ -127,7 +127,7 @@ await joseCryptor.decryptFromTagNode(tagNode: TagNode, theirPublicKey: Uint8Arra
 
 Resolving someone else's `rootCID` will give you a list of their `TagNodes`, which comes with everything the library needs to decrypt the data assuming your public key has been granted access and is on the `REKEY` list (access list).
 
-If your public key is on their access list for the `tag`, then calling `decryptFromTagNode` will recrypt their data for your public/private keypair and return it as a result of this function call.
+If your public key is on their access list for the `tag`, then calling `decryptFromTagNode` will decrypt their data for your public/private keypair and return it as a result of this function call.
 
 If you're not on the list, returns `false`.
 
@@ -157,7 +157,7 @@ To get esbuild to run, we need to add `process` and `util` to our dev deps. This
 
 # Meta
 
-Doug Anderson – [@DougAnderson444](https://twitter.com/DougAnderson444) – YourEmail@example.com
+Doug Anderson – [@DougAnderson444](https://twitter.com/DougAnderson444) - [https://twitter.com/DougAnderson444](https://twitter.com/DougAnderson444)
 
 Distributed under the MIT license. See `LICENSE` for more information.
 
