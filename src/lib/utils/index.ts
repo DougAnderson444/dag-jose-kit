@@ -2,6 +2,7 @@ import b64 from 'base64-js';
 import bs58 from 'bs58';
 import { CID } from 'multiformats/cid';
 import type { IPFS } from 'ipfs-core-types';
+import { base64ToBytes, base58ToBytes, hexToBytes } from 'did-jwt'
 
 const ROOT_CID = '__ROOT_CID';
 const PUBLIC_KEY_BYTES = 32;

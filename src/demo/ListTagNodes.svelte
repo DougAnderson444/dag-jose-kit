@@ -12,8 +12,6 @@
 
 	let tagNodes: TagNode[];
 
-	// console.log({ rootCID, getTagNodes });
-
 	getTagNodes({ ipfsNode, rootCID }).then((tn: TagNode[]) => {
 		tagNodes = tn;
 		console.log({ tagNodes, rootCID });
@@ -21,22 +19,28 @@
 </script>
 
 {#if tagNodes}
-	{#await tagNodes then tagNodes}
-		<div class="text-xs bg-neutral-300 rounded-lg p-2">rootCID: {rootCID}</div>
-		{#each Object.entries(tagNodes) as [tag, tagNode]}
-			{#key tagNode}
-				<Item {tagNode} {decrypt} {viewAccess} {sender} let:decrypted>
-					<div class="flex-1 flex flew-row items-center bg-green-100 rounded-lg">
-						<div class="p-2">
+	{#key tagNodes}
+		{#await tagNodes}
+			Fetching {rootCID}...
+		{:then tagNodes}
+			<div class="text-xs bg-neutral-300 rounded-lg p-2">rootCID: {rootCID}</div>
+			{#each Object.entries(tagNodes) as [tag, tagNode]}
+				{#key tagNode}
+					<Item {tagNode} {decrypt} {viewAccess} {sender} let:decrypted>
+						<svelte:fragment slot="tag">
 							{tag}
-						</div>
+						</svelte:fragment>
 						<div class="p-2">
 							{decrypted}
 						</div>
-					</div>
-				</Item>
-			{/key}
-		{/each}
-	{/await}
+						<svelte:fragment slot="ep">
+							<slot name="endpoint" {tag} pubkey={sender} />
+						</svelte:fragment>
+					</Item>
+					<!-- endpoint slot -->
+				{/key}
+			{/each}
+		{/await}
+	{/key}
 {/if}
 <slot />

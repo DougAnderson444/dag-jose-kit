@@ -43,7 +43,9 @@ export class DagJoseCryptor {
 	proxcryptor: Proxcryptor;
 	ipfs: IPFS;
 	emitter: Emitter<Events>;
-	selfDecryptTag: Function;
+	selfDecrypt: Function;
+	selfDecryptTagNode: Function;
+	grantAccess: Function
 
 	constructor(ipfs: IPFS, proxcryptor: Proxcryptor, cid?: string) {
 		this.ipfs = ipfs;
@@ -69,11 +71,15 @@ export class DagJoseCryptor {
 			prev: this.rootCID ? CID.parse(this.rootCID) : false // link to previous data, if existed
 		};
 
+		lock = true;
+
 		// save it to the DAG rollup
 		const newRootCID = await this.ipfs.dag.put(data, {
 			pin: true,
 			storeCodec: 'dag-cbor' // default
 		});
+
+		lock = false
 
 		// force preload of newly saved DAG
 		this.ipfs.dag.get(newRootCID);
@@ -97,16 +103,18 @@ export class DagJoseCryptor {
 		return hashedPubkeys;
 	}
 
-	async getTagReKeysNode(tag) {
-		if (!tag) return;
-		// get current list of rekeys
-		const resTagNode = await this.ipfs.dag.get(CID.parse(this.rootCID), { path: `/${tag}` });
-		let tagNode = resTagNode.value;
-		const reKeyNode = tagNode[REKEYS];
-		return { reKeyNode, tagNode };
-	}
+	// removed, redundant
+	// async getTagReKeysNode(tagNode) {
+	// 	if (!tag) return;
+	// 	// get current list of rekeys
+	// 	const resTagNode = await this.ipfs.dag.get(CID.parse(this.rootCID), { path: `/${tag}` });
+	// 	let tagNode = resTagNode.value;
+	// 	const reKeyNode = tagNode[REKEYS];
+	// 	return { reKeyNode, tagNode };
+	// }
 
-	async setTagReKeys(tag: string, targetPublicKey: Uint8Array): Promise<CID> {
+	// formerly called setTagReKeys
+	 grantAccess = async(tag: string, targetPublicKey: Uint8Array): Promise<string> => {
 		// put key is special because it is not encrypted
 		// but gets added to rootCID
 		// so targets can access their decryption keys
@@ -119,17 +127,22 @@ export class DagJoseCryptor {
 
 		const hashedPubkeys = await this.getHashedTags(tag, targetPublicKey, senderPubKey); // hex string
 
-		let { reKeyNode, tagNode } = await this.getTagReKeysNode(tag);
+		const resTagNode = await this.ipfs.dag.get(CID.parse(this.rootCID), { path: `/${tag}` });
+		let tagNode = resTagNode.value;
+		let reKeyNode = tagNode[REKEYS]
 
 		// generate a re-encryption key for this targetPublicKey
-		const targetsReKey = await this.proxcryptor.generateReKey(targetPublicKey, tag);
+		// const targetsReKey = await this.proxcryptor.generateReKey(targetPublicKey, tag);
 
 		// now reencrypt using the encrypted msg + reKey
-		const targetsReEncryptedKey = await this.proxcryptor.reEncrypt(
-			targetPublicKey,
-			tagNode.encryptedKey,
-			targetsReKey
-		);
+		// const targetsReEncryptedKey = await this.proxcryptor.reEncrypt(
+		// 	targetPublicKey,
+		// 	tagNode.encryptedKey,
+		// 	targetsReKey
+		// );
+
+		// generate a re-encryption key for this targetPublicKey
+		const targetsReEncryptedKey = await this.proxcryptor.transformTagKey(targetPublicKey, tag, tagNode.encryptedKey);
 
 		// lookup dictionary: Map of (key=hash, value=reEncrKey)
 		reKeyNode[hashedPubkeys] = targetsReEncryptedKey;
@@ -139,18 +152,20 @@ export class DagJoseCryptor {
 
 		// update CID rollup
 		this.rootCID = await this.updateDag(tag, tagNode);
+		this.emitter.emit('rootCIDUpdate', this.rootCID);
 		return this.rootCID;
 	}
 
-	async checkAccess(tag: string, targetPublicKey: Uint8Array, senderPubKey: Uint8Array) {
-		if (!tag) return;
+	checkAccess = async (tagNode: TagNode, targetPublicKey: Uint8Array, senderPubKey: Uint8Array): Promise<boolean>  =>{
+		console.log("Checking access to tag: ", tagNode.tag, "for ", {targetPublicKey}, "from ", {senderPubKey});
+		if (!tagNode.tag) return false;
 
 		// check if this target is on the ReKey list
-		const hashedPubkeys = await this.getHashedTags(tag, targetPublicKey, senderPubKey); // hex string
-		let { reKeyNode, tagNode } = await this.getTagReKeysNode(tag);
+		const hashedPubkeys = await this.getHashedTags(tagNode.tag, targetPublicKey, senderPubKey); // hex string
+		console.log("Hashed pubkey: ", hashedPubkeys);
 
 		// lookup in dictionary: Map of (key=hash, value=reEncrKey)
-		if (hashedPubkeys in reKeyNode) return reKeyNode[hashedPubkeys]; // access was granted
+		if (hashedPubkeys in tagNode[REKEYS]) return true // reKeyNode[hashedPubkeys]; // access was granted
 		// else
 		return false;
 	}

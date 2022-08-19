@@ -13,11 +13,18 @@
 	let decrypted: any = false;
 	let onAccessList: boolean = false;
 
+	$: if (tagNode)
+		(async () => {
+			console.log('View access for', { tagNode });
+			console.log('tagNode.tag', tagNode.tag, !viewAccess || !tagNode.tag || !sender);
+			if (!viewAccess || !tagNode.tag || !sender) return;
+			// check if is also on access list
+			onAccessList = await viewAccess({ tagNode, sender });
+		})();
+
 	const decryptHandler = async (event: Event): Promise<void> => {
 		console.log('decryptHandler', { tagNode }, { sender });
 		if (sender && viewAccess) {
-			// check if is also on access list
-			onAccessList = await viewAccess(tagNode.tag, sender);
 			if (!onAccessList) {
 				console.log('not on access list');
 				return;
@@ -34,22 +41,25 @@
 	};
 </script>
 
-{#if decrypted}
-	{#await decrypted}
-		<Spinner>Decrypting...</Spinner>
-	{:then decrypted}
-		<p>📂 Decrypted:</p>
-		<slot decrypted={decrypted.data} />
-	{/await}
-{:else if tagNode}
-	<div class="flex flex-row">
-		<div class="shrink mr-2">
-			{tagNode.tag}
-		</div>
-		<button
-			on:click={decryptHandler}
-			class="flex-1 mr-2 disabled:opacity-30"
-			disabled={sender && !onAccessList}>🔒 Decrypt</button
-		>
+<div class="flex flex-row">
+	<div class="shrink mr-2">
+		<slot name="tag" />
 	</div>
-{/if}
+	<div class="grow">
+		{#if decrypted}
+			{#await decrypted}
+				<Spinner>Decrypting...</Spinner>
+			{:then decrypted}
+				<p>📂 Decrypted:</p>
+				<slot decrypted={decrypted.data} />
+			{/await}
+		{:else if tagNode}
+			<button
+				on:click={decryptHandler}
+				class="flex-1 mr-2 disabled:opacity-30"
+				disabled={sender && !onAccessList}>🔒 Decrypt</button
+			>
+		{/if}
+	</div>
+	<slot name="ep" />
+</div>

@@ -25,7 +25,7 @@
 	import type { IPFS } from 'ipfs-core-types';
 
 	// import some demo utils
-	import { Item, Input, Card, Skew, Spinner, Button, Title, ListTagNodes } from '$demo/index.js';
+	import { Input, Card, Skew, Spinner, Button, Headerz, ListTagNodes } from '$demo/index.js';
 	import Progress from '$demo/Progress.svelte';
 	import type { TagNode } from '$lib/dagjosecryptor.js';
 
@@ -95,11 +95,27 @@
 	// we also need a way to display the data in our IPFS nodes
 	let myTagNodes: Record<string, TagNode>;
 
+	// need to store the path link soemwhere for Canvas
+	let data = { nodes: [], links: [] };
+
+	let Canvas: any; // SvelteComponentTyped | null;
+	let EndPoint: any; // SvelteComponentTyped | null;
+
+	// config Canvas options
+	let opts = {
+		links: {
+			strokeWidth: 1,
+			textStartOffset: 20
+		}
+	};
+
 	onMount(async () => {
 		HypnsComponent = (await import('@douganderson444/hypns-svelte-component')).default;
 
 		await loadIPFS();
 		({ Web3WalletMenu } = await import('@peerpiper/web3-wallet-connector'));
+
+		({ Canvas, EndPoint } = await import('@douganderson444/svelte-plumb'));
 
 		setJoseCryptor = async () => {
 			if (!wallet?.proxcryptor) return;
@@ -133,9 +149,7 @@
 
 		// Open any missing hypns listener for the PK
 		try {
-			const newInstance = await getInstance(bufftoHex(maybeValid));
-			if (!newInstance) return;
-			setupHypnsInstance(newInstance);
+			await getInstance(bufftoHex(maybeValid));
 		} catch (error) {
 			console.error(error);
 		}
@@ -145,6 +159,16 @@
 	}
 
 	function updateContacts(pubkey: Uint8Array, rootCID: string | null = null) {
+		// see if there is an existing handle
+		const existing = contacts?.[bufftoHex(pubkey)];
+		if (existing) {
+			existing.rootCID = rootCID;
+			contacts = contacts; // refresh Svelte UI
+
+			console.log({ contacts });
+			return;
+		}
+		// if not, add it
 		contacts = {
 			...contacts,
 			[bufftoHex(pubkey)]: { handle, rootCID }
@@ -157,7 +181,6 @@
 		if (!tn) return;
 		myTagNodes = tn;
 
-		console.log({ contacts }, !contacts);
 		// if no contacts, get contacts from tagNodes
 		if (!contacts && myTagNodes.hasOwnProperty('Contacts')) {
 			console.log('Pulling contacts from crypt');
@@ -167,9 +190,7 @@
 			contacts = res.data as Record<string, ContactInfo>;
 			// also need to load them into PiperNet
 			for (const [pubkey, { handle, rootCID }] of Object.entries(contacts)) {
-				const newInstance = await getInstance(pubkey);
-				if (!newInstance) continue;
-				setupHypnsInstance(newInstance);
+				await getInstance(pubkey);
 			}
 		}
 	}
@@ -200,7 +221,15 @@
 		if (!maybeValid) return null;
 		const publicKey = bufftoHex(maybeValid);
 		try {
+			console.log('Setting up PiperNet for', publicKey);
 			const inst = await hypnsNode.open({ keypair: { publicKey } }); // works with or without a PublicKey
+			inst.on('update', (latest: any) => {
+				if (latest?.rootCID) {
+					console.log(`PiperNet update for ${publicKey} => ${latest.rootCID}`);
+					updateContacts(maybeValid, latest.rootCID);
+					pinCID(latest.rootCID);
+				}
+			});
 			await inst.ready();
 			return inst;
 		} catch (error) {
@@ -209,23 +238,9 @@
 		return null;
 	}
 
-	function setupHypnsInstance(instance: HypnsInstance): void {
-		console.log('Setting up', instance.publicKey);
-
-		const maybeValidpk = validatePubKey(instance.publicKey);
-		if (!maybeValidpk) return;
-		// updateContacts(maybeValidpk);
-
-		instance.on('update', (latest: any) => {
-			if (latest?.rootCID) {
-				console.log(`update: ${latest.rootCID}`);
-				updateContacts(maybeValidpk, latest.rootCID);
-				pinCID(latest.rootCID);
-			}
-		});
-	}
-
 	async function pinCID(cid: string | CID) {
+		console.log('Pinning...', cid.toString());
+
 		let pinned = await ipfsNode.pin.add(cid, { recursive: true });
 		console.log({ pinned: pinned.toString() });
 
@@ -240,17 +255,17 @@
 	}
 
 	async function viewAccess({
-		tag,
+		tagNode,
 		sender
 	}: {
-		tag: string;
+		tagNode: TagNode;
 		sender: Uint8Array;
 	}): Promise<boolean> {
 		// myPublicKey
 		if (!wallet) return false;
 		const pk = await wallet.proxcryptor.getPublicKey();
 		if (!Array.isArray(pk)) return false;
-		return await joseCryptor.checkAccess(tag, pk as Uint8Array, sender);
+		return await joseCryptor.checkAccess(tagNode, pk as Uint8Array, sender);
 	}
 
 	/**
@@ -268,6 +283,20 @@
 	 *  Show latest tagNodes assoc with the rootCID
 	 */
 	$: myRootCID && handleRootCIDUpdate();
+
+	// When a user connects a data to a target, handle it
+	async function handleConnected(e: CustomEvent) {
+		console.log('Connected', e.detail);
+		let toast = e.detail.source?.dataset + ' to ' + e.detail.target?.dataset;
+		const maybeValid = validatePubKey(e.detail.target?.dataset?.pubkey);
+		if (!maybeValid) return;
+		if (!e.detail.source?.dataset?.tag) return;
+
+		const pubkey = maybeValid;
+		// grant access with proxcryptor
+		await joseCryptor.grantAccess(e.detail.source.dataset.tag, pubkey);
+		// toast
+	}
 </script>
 
 {#if !ipfsNode}
@@ -301,10 +330,15 @@
 {/if}
 
 <main class="m-4 flex flex-col h-screen">
-	<Title>DAG-JOSE-<Skew>Proxcryptor</Skew> Mini Demo</Title>
+	<Headerz>DAG-JOSE-<Skew>Proxcryptor</Skew> Mini Demo</Headerz>
 
 	{#if Web3WalletMenu}
-		<svelte:component this={Web3WalletMenu} bind:wallet />
+		<svelte:component
+			this={Web3WalletMenu}
+			on:walletReady={(e) => {
+				wallet = e.detail.wallet;
+			}}
+		/>
 	{:else}
 		<div class="fixed top-10 right-10 ">
 			<Spinner>Loading Wallet...</Spinner>
@@ -318,7 +352,7 @@
 	{#if loaded}
 		<div class="flex flex-row mt-4 flex-nowrap justify-start items-stretch space-x-4 align-top ">
 			<Card>
-				<Title><Skew color={'pink'}>New</Skew> Data</Title>
+				<Headerz><Skew color={'pink'}>New</Skew> Data</Headerz>
 				<Input name="Tag" bind:value={tag} />
 				<Input name="Your Data" bind:value={myData} />
 				<Button clickHandler={putValue} disabled={!tag || !myData} type={'Yes'}>
@@ -326,7 +360,7 @@
 				</Button>
 			</Card>
 			<Card>
-				<Title>Contacts</Title>
+				<Headerz>Contacts</Headerz>
 				<Input name="Handle" bind:value={handle} />
 				<Input name="Their Public Key" bind:value={myContact} />
 				<Button
@@ -340,75 +374,106 @@
 		</div>
 
 		<div class="mt-4">
-			{#if myRootCID}
-				<Card>
-					<Title>Your Data Details</Title>
-					<div class="my-2">
-						MyRootCID: <span class="bg-green-100 rounded-xl p-2 my-2 mono text-sm">{myRootCID}</span
-						>
-					</div>
+			{#if myRootCID && Canvas}
+				<Canvas bind:data let:connectable {opts} on:connected={handleConnected}>
+					<Card>
+						<Headerz>Your Data Details</Headerz>
+						<div class="my-2">
+							MyRootCID: <span class="bg-green-100 rounded-xl p-2 my-2 mono text-sm"
+								>{myRootCID}</span
+							>
+						</div>
 
-					<div class="flex flex-row">
-						{#if myTagNodes}
-							{#await myTagNodes}
-								Getting Tag NodeList...
-							{:then myTagNodes}
-								<div class="flex-1 flex flex-col bg-slate-200/20 shadow-lg m-1 p-4 rounded-xl">
-									<Title>Data</Title>
-									<ListTagNodes
-										{getTagNodes}
-										{ipfsNode}
-										rootCID={myRootCID}
-										decrypt={joseCryptor.selfDecrypt}
-									/>
-								</div>
-								{#if contacts}
-									<div class="flex-1 flex flex-col bg-slate-200/20 shadow-lg m-1 p-4 rounded-xl">
-										<Title>Contacts</Title>
-										<!-- If no contacts, decrypt them from IPLD -->
-										{#each Object.entries(contacts) as [pubkey, { handle, rootCID }]}
-											<div
-												class="flex flew-row items-center bg-green-100 rounded-lg text-xs h-fit border-2"
+						<div class="flex flex-row justify-between w-full">
+							{#if myTagNodes}
+								{#key myTagNodes}
+									{#await myTagNodes}
+										Getting Tag NodeList...
+									{:then myTagNodes}
+										<div
+											class="flex-initial flex flex-col bg-slate-200/20 shadow-lg m-1 p-4 rounded-xl w-2/5"
+										>
+											<Headerz>Data</Headerz>
+											<ListTagNodes
+												{getTagNodes}
+												{ipfsNode}
+												rootCID={myRootCID}
+												decrypt={joseCryptor.selfDecrypt}
 											>
-												<div class="p-2">
-													{handle}
-												</div>
-												<div class="p-2">
-													{hexToB64(pubkey)}
-												</div>
-											</div>
-											{#if rootCID}
-												<div class="p-2">
-													<!-- Get TAGS for each rootCID -->
-													<ListTagNodes
-														{getTagNodes}
-														{ipfsNode}
-														{rootCID}
-														decrypt={pubkey.toLocaleUpperCase() ==
-														myHypnsInstance.publicKey.toLocaleUpperCase()
-															? joseCryptor.selfDecrypt
-															: joseCryptor.decryptFromTagNode}
-														sender={pubkey.toLocaleUpperCase() ==
-														myHypnsInstance.publicKey.toLocaleUpperCase()
-															? undefined
-															: bytesFromHexString(pubkey)}
-														viewAccess={pubkey.toLocaleUpperCase() ==
-														myHypnsInstance.publicKey.toLocaleUpperCase()
-															? undefined
-															: viewAccess}
-													/>
+												<EndPoint
+													slot="endpoint"
+													let:tag
+													position={'right'}
+													{connectable}
+													options={{ dataset: { tag }, startOnly: true }}
+												/>
+											</ListTagNodes>
+										</div>
+										{#if contacts}
+											{#key contacts}
+												<div
+													class="flex-initial flex flex-col bg-slate-200/20 shadow-lg m-1 p-4 rounded-xl w-2/5"
+												>
+													<Headerz>Contacts</Headerz>
+													<!-- If no contacts, decrypt them from IPLD -->
+													{#each Object.entries(contacts) as [pubkey, { handle, rootCID }]}
+														<div
+															class="flex flew-row items-center bg-green-100 rounded-lg text-xs h-fit border-2"
+														>
+															<div class="p-2">
+																{handle}
+															</div>
+															<div class="p-2">
+																{hexToB64(pubkey)}
+															</div>
+															<EndPoint
+																slot="endpoint"
+																position={'left'}
+																{connectable}
+																options={{ dataset: { pubkey }, startOnly: true }}
+															>
+																<!-- custom endpoint -->
+																<div
+																	class="h-4 w-4 bg-white rounded-full border-4 border-black hover:ring hover:ring-green-800"
+																/>
+															</EndPoint>
+														</div>
+														{#if rootCID}
+															<div class="p-2">
+																<!-- Get TAGS for each rootCID -->
+																<ListTagNodes
+																	{getTagNodes}
+																	{ipfsNode}
+																	{rootCID}
+																	decrypt={pubkey.toLocaleUpperCase() ==
+																	myHypnsInstance.publicKey.toLocaleUpperCase()
+																		? joseCryptor.selfDecrypt
+																		: joseCryptor.decryptFromTagNode}
+																	sender={pubkey.toLocaleUpperCase() ==
+																	myHypnsInstance.publicKey.toLocaleUpperCase()
+																		? undefined
+																		: bytesFromHexString(pubkey)}
+																	viewAccess={pubkey.toLocaleUpperCase() ==
+																	myHypnsInstance.publicKey.toLocaleUpperCase()
+																		? undefined
+																		: viewAccess}
+																/>
 
-													<!-- Check contacts access list -->
-													<!-- Offer to decrypt if on access list -->
+																<!-- Check contacts access list -->
+																<!-- Offer to decrypt if on access list -->
+															</div>
+														{:else}
+															<div class="text-xs">No rootCID</div>
+														{/if}
+													{/each}
 												</div>
-											{/if}
-										{/each}
-									</div>
-								{/if}
-							{/await}
-						{/if}
-					</div>
-				</Card>
+											{/key}
+										{/if}
+									{/await}
+								{/key}{/if}
+						</div>
+					</Card>
+				</Canvas>
 			{:else}
 				<div
 					class="flex flex-grow rounded-3xl border-4 border-dashed p-10 font-extrabold text-xl text-black/30"
