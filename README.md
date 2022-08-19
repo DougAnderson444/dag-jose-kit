@@ -4,6 +4,49 @@ Save and retrieve encrypted data [CIDs](https://cid.ipfs.tech/) to IPFS [DAG](ht
 
 Rolls everything up to a single Root CID, with all previous data located at `prev` for easy reference.
 
+```mermaid
+flowchart LR
+  subgraph Dag-JOSE-Kit
+    direction TB
+        subgraph P2P-Hypercore-Protocol-HyPNS[P2P Network or Blockchain]
+            direction LR
+            pk  -.-> |WebRTC|Contacts[Alice: \n Gets Latest \n Merkle Root from \n swarm/pubsub Topic]
+            subgraph ContactBook
+                direction LR
+                Contacts
+            end
+        end
+        subgraph IPLD
+            direction TB
+            m1[Merkle Root] -.->|next|M[Merkle Root]
+            M -.->|prev|m1
+            AliceRenders
+            AccessList
+        end
+    subgraph Data
+        direction BT
+        Decrypted
+        AliceDApp
+    end
+    subgraph Wallet
+        direction TB
+        Encrypt <-.-> |PKI|Decrypt
+        K[Re-encryption Key] --> AccessList[Access List]-->M
+        AliceDecrypt[Alice uses \n re-encryption \n key to Decrypt \n shared data]
+    end
+  end
+    M -.->  pk(Topic: Public Key \n Data: Latest Merkle Root)
+  m1[Merkle Root CID] -->|User Data Ciphertext| Decrypt
+  Decrypt -->|User Data Plaintext| Decrypted
+  Decrypted -->|Updated User Data| Encrypt
+  Encrypt-->|Updated Encrypted User Data| M[New Merkle Root CID]
+  Encrypt-->|Re-Encrypted Key for Alice| K
+  AliceRenders[Alice: \nResolves data from Merkle Root]
+  Contacts-->AliceRenders
+  AliceRenders-->AliceDecrypt
+  AliceDecrypt-->AliceDApp[Alice views \n Decrypted Data]
+```
+
 ## Installation
 
 ```sh
