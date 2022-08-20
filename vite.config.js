@@ -14,7 +14,15 @@ const config = {
 	build: {
 		commonjsOptions: {
 			include: [/immortal-db/, /node_modules/, /hypns/]
+		},
+		minify: false,
+		sourcemap: true,
+		optimization: {
+			minimize: false
 		}
+	},
+	optimization: {
+		minimize: false
 	},
 	optimizeDeps: {
 		include: ['immortal-db', 'hypns']

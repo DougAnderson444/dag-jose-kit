@@ -12,10 +12,11 @@
 
 	let tagNodes: TagNode[];
 
-	getTagNodes({ ipfsNode, rootCID }).then((tn: TagNode[]) => {
-		tagNodes = tn;
+	// timeout + retry?
+	(async () => {
+		tagNodes = await getTagNodes({ ipfsNode, rootCID });
 		console.log({ tagNodes, rootCID });
-	});
+	})();
 </script>
 
 {#if tagNodes}

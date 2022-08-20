@@ -2,7 +2,7 @@ import b64 from 'base64-js';
 import bs58 from 'bs58';
 import { CID } from 'multiformats/cid';
 import type { IPFS } from 'ipfs-core-types';
-import { base64ToBytes, base58ToBytes, hexToBytes } from 'did-jwt'
+import { base64ToBytes, base58ToBytes, hexToBytes } from 'did-jwt';
 
 const ROOT_CID = '__ROOT_CID';
 const PUBLIC_KEY_BYTES = 32;
@@ -97,7 +97,9 @@ export async function getTagNodes({
 	rootCID: string;
 }): Promise<Record<string, TagNode>> {
 	if (!ipfsNode || !rootCID) return;
-	const root = await ipfsNode.dag.get(CID.parse(rootCID));
+	console.log('getTagNodes for ' + rootCID);
+	const root = await ipfsNode.dag.get(CID.parse(rootCID), { timeout: 2000 });
+	console.log('got TagNodes for ', { root });
 	const promises = Object.entries(root.value).map(async ([key, val]) => {
 		if (key === 'prev' || !val) return null;
 		let fields = await ipfsNode.dag.get(val);

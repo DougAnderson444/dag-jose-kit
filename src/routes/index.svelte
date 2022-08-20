@@ -190,7 +190,8 @@
 			contacts = res.data as Record<string, ContactInfo>;
 			// also need to load them into PiperNet
 			for (const [pubkey, { handle, rootCID }] of Object.entries(contacts)) {
-				await getInstance(pubkey);
+				const instance = await getInstance(pubkey);
+				console.log(`Contact setup. `, { instance });
 			}
 		}
 	}

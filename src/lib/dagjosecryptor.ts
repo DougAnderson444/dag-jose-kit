@@ -157,12 +157,10 @@ export class DagJoseCryptor {
 	}
 
 	checkAccess = async (tagNode: TagNode, targetPublicKey: Uint8Array, senderPubKey: Uint8Array): Promise<boolean>  =>{
-		console.log("Checking access to tag: ", tagNode.tag, "for ", {targetPublicKey}, "from ", {senderPubKey});
 		if (!tagNode.tag) return false;
 
 		// check if this target is on the ReKey list
 		const hashedPubkeys = await this.getHashedTags(tagNode.tag, targetPublicKey, senderPubKey); // hex string
-		console.log("Hashed pubkey: ", hashedPubkeys);
 
 		// lookup in dictionary: Map of (key=hash, value=reEncrKey)
 		if (hashedPubkeys in tagNode[REKEYS]) return true // reKeyNode[hashedPubkeys]; // access was granted

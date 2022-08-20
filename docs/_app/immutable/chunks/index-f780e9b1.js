@@ -1,1 +1,2020 @@
-import{S as K,i as x,s as $,F as ee,l as X,m as V,n as M,h as C,p as b,q as A,a1 as Ye,b as D,aa as Re,G as te,H as se,I as ne,f as P,t as T,_ as ie,E as G,e as ae,o as Qe,N as Y,O as R,Z as Ue,r as we,a as J,u as Oe,c as Q,a4 as re,J as H,v as Ze,M as q,g as le,d as oe,a7 as qe,C as Le,w as fe,x as ue,y as he,z as Ce,A as Pe,B as ce,R as Ge,ab as Ke,$ as xe,a0 as $e,a6 as et,Q as tt}from"./index-ef46e954.js";class N{constructor(e){this.id=-1,this.nativePointer=e,this.pageX=e.pageX,this.pageY=e.pageY,this.clientX=e.clientX,this.clientY=e.clientY,self.Touch&&e instanceof Touch?this.id=e.identifier:Z(e)&&(this.id=e.pointerId)}getCoalesced(){if("getCoalescedEvents"in this.nativePointer){const e=this.nativePointer.getCoalescedEvents().map(t=>new N(t));if(e.length>0)return e}return[this]}}const Z=s=>"pointerId"in s,de=s=>"changedTouches"in s,ye=()=>{};class st{constructor(e,{start:t=()=>!0,move:n=ye,end:i=ye,rawUpdates:o=!1,avoidPointerEvents:l=!1,eventListenerOptions:a={capture:!1,passive:!1,once:!1}}={}){this._element=e,this.startPointers=[],this.currentPointers=[],this._excludeFromButtonsCheck=new Set,this._pointerStart=r=>{if(Z(r)&&r.buttons===0)this._excludeFromButtonsCheck.add(r.pointerId);else if(!(r.buttons&1))return;const f=new N(r);this.currentPointers.some(d=>d.id===f.id)||!this._triggerPointerStart(f,r)||(Z(r)?((r.target&&"setPointerCapture"in r.target?r.target:this._element).setPointerCapture(r.pointerId),this._element.addEventListener(this._rawUpdates?"pointerrawupdate":"pointermove",this._move,this._eventListenerOptions),this._element.addEventListener("pointerup",this._pointerEnd,this._eventListenerOptions),this._element.addEventListener("pointercancel",this._pointerEnd,this._eventListenerOptions)):(window.addEventListener("mousemove",this._move),window.addEventListener("mouseup",this._pointerEnd)))},this._touchStart=r=>{for(const f of Array.from(r.changedTouches))this._triggerPointerStart(new N(f),r)},this._move=r=>{if(!de(r)&&(!Z(r)||!this._excludeFromButtonsCheck.has(r.pointerId))&&r.buttons===0){this._pointerEnd(r);return}const f=this.currentPointers.slice(),d=de(r)?Array.from(r.changedTouches).map(h=>new N(h)):[new N(r)],u=[];for(const h of d){const m=this.currentPointers.findIndex(O=>O.id===h.id);m!==-1&&(u.push(h),this.currentPointers[m]=h)}u.length!==0&&this._moveCallback(f,u,r)},this._triggerPointerEnd=(r,f)=>{if(!de(f)&&f.buttons&1)return!1;const d=this.currentPointers.findIndex(h=>h.id===r.id);if(d===-1)return!1;this.currentPointers.splice(d,1),this.startPointers.splice(d,1),this._excludeFromButtonsCheck.delete(r.id);const u=!(f.type==="mouseup"||f.type==="touchend"||f.type==="pointerup");return this._endCallback(r,f,u),!0},this._pointerEnd=r=>{if(!!this._triggerPointerEnd(new N(r),r))if(Z(r)){if(this.currentPointers.length)return;this._element.removeEventListener(this._rawUpdates?"pointerrawupdate":"pointermove",this._move),this._element.removeEventListener("pointerup",this._pointerEnd),this._element.removeEventListener("pointercancel",this._pointerEnd)}else window.removeEventListener("mousemove",this._move),window.removeEventListener("mouseup",this._pointerEnd)},this._touchEnd=r=>{for(const f of Array.from(r.changedTouches))this._triggerPointerEnd(new N(f),r)},this._startCallback=t,this._moveCallback=n,this._endCallback=i,this._rawUpdates=o&&"onpointerrawupdate"in window,this._eventListenerOptions=a,self.PointerEvent&&!l?this._element.addEventListener("pointerdown",this._pointerStart,this._eventListenerOptions):(this._element.addEventListener("mousedown",this._pointerStart,this._eventListenerOptions),this._element.addEventListener("touchstart",this._touchStart,this._eventListenerOptions),this._element.addEventListener("touchmove",this._move,this._eventListenerOptions),this._element.addEventListener("touchend",this._touchEnd,this._eventListenerOptions),this._element.addEventListener("touchcancel",this._touchEnd,this._eventListenerOptions))}stop(){this._element.removeEventListener("pointerdown",this._pointerStart),this._element.removeEventListener("mousedown",this._pointerStart),this._element.removeEventListener("touchstart",this._touchStart),this._element.removeEventListener("touchmove",this._move),this._element.removeEventListener("touchend",this._touchEnd),this._element.removeEventListener("touchcancel",this._touchEnd),this._element.removeEventListener(this._rawUpdates?"pointerrawupdate":"pointermove",this._move),this._element.removeEventListener("pointerup",this._pointerEnd),this._element.removeEventListener("pointercancel",this._pointerEnd),window.removeEventListener("mousemove",this._move),window.removeEventListener("mouseup",this._pointerEnd)}_triggerPointerStart(e,t){return this._startCallback(e,t)?(this.currentPointers.push(e),this.startPointers.push(e),!0):!1}}let nt=(s=21)=>crypto.getRandomValues(new Uint8Array(s)).reduce((e,t)=>(t&=63,t<36?e+=t.toString(36):t<62?e+=(t-26).toString(36).toUpperCase():t>62?e+="-":e+="_",e),"");function it(s){let e;return{c(){e=X("div"),this.h()},l(t){e=V(t,"DIV",{class:!0}),M(e).forEach(C),this.h()},h(){b(e,"class","h-16 w-16 p-8 rounded-full shadow-xl opacity-80 select-none border-[2em] border-pink-500/50")},m(t,n){D(t,e,n)},p:G,d(t){t&&C(e)}}}function rt(s){let e,t,n;const i=s[9].default,o=ee(i,s,s[8],null),l=o||it();return{c(){e=X("div"),l&&l.c(),this.h()},l(a){e=V(a,"DIV",{id:!0,class:!0,style:!0});var r=M(e);l&&l.l(r),r.forEach(C),this.h()},h(){b(e,"id",s[1]),b(e,"class","absolute"),A(e,"left",s[5]+"px"),A(e,"top",s[4]+"px"),Ye(()=>s[11].call(e))},m(a,r){D(a,e,r),l&&l.m(e,null),s[10](e),t=Re(e,s[11].bind(e)),n=!0},p(a,[r]){o&&o.p&&(!n||r&256)&&te(o,i,a,a[8],n?ne(i,a[8],r,null):se(a[8]),null),(!n||r&2)&&b(e,"id",a[1]),(!n||r&32)&&A(e,"left",a[5]+"px"),(!n||r&16)&&A(e,"top",a[4]+"px")},i(a){n||(P(l,a),n=!0)},o(a){T(l,a),n=!1},d(a){a&&C(e),l&&l.d(a),s[10](null),t()}}}function lt(s,e,t){let n,i,{$$slots:o={},$$scope:l}=e,{marker:a}=e,{id:r}=e,{left:f}=e,{top:d}=e,u,h;function m(E){ie[E?"unshift":"push"](()=>{a=E,t(0,a)})}function O(){u=this.offsetWidth,h=this.offsetHeight,t(2,u),t(3,h)}return s.$$set=E=>{"marker"in E&&t(0,a=E.marker),"id"in E&&t(1,r=E.id),"left"in E&&t(6,f=E.left),"top"in E&&t(7,d=E.top),"$$scope"in E&&t(8,l=E.$$scope)},s.$$.update=()=>{s.$$.dirty&68&&t(5,n=f-u/2),s.$$.dirty&136&&t(4,i=d-h/2)},[a,r,u,h,i,n,f,d,l,o,m,O]}class ot extends K{constructor(e){super(),x(this,e,lt,rt,$,{marker:0,id:1,left:6,top:7})}}const me=Math.PI,ge=2*me,U=1e-6,at=ge-U;function pe(){this._x0=this._y0=this._x1=this._y1=null,this._=""}function je(){return new pe}pe.prototype=je.prototype={constructor:pe,moveTo:function(s,e){this._+="M"+(this._x0=this._x1=+s)+","+(this._y0=this._y1=+e)},closePath:function(){this._x1!==null&&(this._x1=this._x0,this._y1=this._y0,this._+="Z")},lineTo:function(s,e){this._+="L"+(this._x1=+s)+","+(this._y1=+e)},quadraticCurveTo:function(s,e,t,n){this._+="Q"+ +s+","+ +e+","+(this._x1=+t)+","+(this._y1=+n)},bezierCurveTo:function(s,e,t,n,i,o){this._+="C"+ +s+","+ +e+","+ +t+","+ +n+","+(this._x1=+i)+","+(this._y1=+o)},arcTo:function(s,e,t,n,i){s=+s,e=+e,t=+t,n=+n,i=+i;var o=this._x1,l=this._y1,a=t-s,r=n-e,f=o-s,d=l-e,u=f*f+d*d;if(i<0)throw new Error("negative radius: "+i);if(this._x1===null)this._+="M"+(this._x1=s)+","+(this._y1=e);else if(u>U)if(!(Math.abs(d*a-r*f)>U)||!i)this._+="L"+(this._x1=s)+","+(this._y1=e);else{var h=t-o,m=n-l,O=a*a+r*r,E=h*h+m*m,y=Math.sqrt(O),v=Math.sqrt(u),p=i*Math.tan((me-Math.acos((O+u-E)/(2*y*v)))/2),B=p/v,w=p/y;Math.abs(B-1)>U&&(this._+="L"+(s+B*f)+","+(e+B*d)),this._+="A"+i+","+i+",0,0,"+ +(d*h>f*m)+","+(this._x1=s+w*a)+","+(this._y1=e+w*r)}},arc:function(s,e,t,n,i,o){s=+s,e=+e,t=+t,o=!!o;var l=t*Math.cos(n),a=t*Math.sin(n),r=s+l,f=e+a,d=1^o,u=o?n-i:i-n;if(t<0)throw new Error("negative radius: "+t);this._x1===null?this._+="M"+r+","+f:(Math.abs(this._x1-r)>U||Math.abs(this._y1-f)>U)&&(this._+="L"+r+","+f),t&&(u<0&&(u=u%ge+ge),u>at?this._+="A"+t+","+t+",0,1,"+d+","+(s-l)+","+(e-a)+"A"+t+","+t+",0,1,"+d+","+(this._x1=r)+","+(this._y1=f):u>U&&(this._+="A"+t+","+t+",0,"+ +(u>=me)+","+d+","+(this._x1=s+t*Math.cos(i))+","+(this._y1=e+t*Math.sin(i))))},rect:function(s,e,t,n){this._+="M"+(this._x0=this._x1=+s)+","+(this._y0=this._y1=+e)+"h"+ +t+"v"+ +n+"h"+-t+"Z"},toString:function(){return this._}};function Se(s){return function(){return s}}var ft=Array.prototype.slice;function ut(s){return s[0]}function ht(s){return s[1]}class ct{constructor(e,t){this._context=e,this._x=t}areaStart(){this._line=0}areaEnd(){this._line=NaN}lineStart(){this._point=0}lineEnd(){(this._line||this._line!==0&&this._point===1)&&this._context.closePath(),this._line=1-this._line}point(e,t){switch(e=+e,t=+t,this._point){case 0:{this._point=1,this._line?this._context.lineTo(e,t):this._context.moveTo(e,t);break}case 1:this._point=2;default:{this._x?this._context.bezierCurveTo(this._x0=(this._x0+e)/2,this._y0,this._x0,t,e,t):this._context.bezierCurveTo(this._x0,this._y0=(this._y0+t)/2,e,this._y0,e,t);break}}this._x0=e,this._y0=t}}function _t(s){return new ct(s,!0)}function dt(s){return s.source}function mt(s){return s.target}function gt(s){let e=dt,t=mt,n=ut,i=ht,o=null,l=null;function a(){let r;const f=ft.call(arguments),d=e.apply(this,f),u=t.apply(this,f);if(o==null&&(l=s(r=je())),l.lineStart(),f[0]=d,l.point(+n.apply(this,f),+i.apply(this,f)),f[0]=u,l.point(+n.apply(this,f),+i.apply(this,f)),l.lineEnd(),r)return l=null,r+""||null}return a.source=function(r){return arguments.length?(e=r,a):e},a.target=function(r){return arguments.length?(t=r,a):t},a.x=function(r){return arguments.length?(n=typeof r=="function"?r:Se(+r),a):n},a.y=function(r){return arguments.length?(i=typeof r=="function"?r:Se(+r),a):i},a.context=function(r){return arguments.length?(r==null?o=l=null:l=s(o=r),a):o},a}function Te(s,e,t){const n=s.slice();return n[17]=e[t],n[19]=t,n}function ze(s){let e,t=s[0],n=[];for(let i=0;i<t.length;i+=1)n[i]=Ie(Te(s,t,i));return{c(){e=Y("svg");for(let i=0;i<n.length;i+=1)n[i].c();this.h()},l(i){e=R(i,"svg",{style:!0,class:!0});var o=M(e);for(let l=0;l<n.length;l+=1)n[l].l(o);o.forEach(C),this.h()},h(){A(e,"pointer-events","none"),b(e,"class","svelte-1t43067")},m(i,o){D(i,e,o);for(let l=0;l<n.length;l+=1)n[l].m(e,null)},p(i,o){if(o&2047){t=i[0];let l;for(l=0;l<t.length;l+=1){const a=Te(i,t,l);n[l]?n[l].p(a,o):(n[l]=Ie(a),n[l].c(),n[l].m(e,null))}for(;l<n.length;l+=1)n[l].d(1);n.length=t.length}},d(i){i&&C(e),Ue(n,i)}}}function Me(s){var v,p,B,w,g,c;let e,t,n,i,o,l,a,r=((B=(p=(v=s[17])==null?void 0:v.opts)==null?void 0:p.label)!=null&&B.enabled?(c=(g=(w=s[17])==null?void 0:w.opts)==null?void 0:g.label)==null?void 0:c.value:"")+"",f,d,u,h,m,O,E,y;return{c(){e=Y("g"),t=Y("path"),o=Y("text"),l=Y("textPath"),a=Y("tspan"),f=we(r),d=J(),m=Y("textPath"),O=we("\u27A4"),this.h()},l(_){e=R(_,"g",{stroke:!0,"stroke-opacity":!0});var k=M(e);t=R(k,"path",{d:!0,id:!0,"stroke-width":!0,stroke:!0,fill:!0,"stroke-linecap":!0,"stroke-opacity":!0}),M(t).forEach(C),o=R(k,"text",{class:!0});var S=M(o);l=R(S,"textPath",{"xlink:href":!0,startOffset:!0});var z=M(l);a=R(z,"tspan",{fill:!0,class:!0});var F=M(a);f=Oe(F,r),F.forEach(C),d=Q(z),z.forEach(C),m=R(S,"textPath",{"xlink:href":!0,startOffset:!0,fill:!0,opacity:!0});var L=M(m);O=Oe(L,"\u27A4"),L.forEach(C),S.forEach(C),k.forEach(C),this.h()},h(){b(t,"d",n=s[10](s[17])),b(t,"id",i=s[17].id),b(t,"stroke-width",s[2]),b(t,"stroke",s[1]),b(t,"fill","none"),b(t,"stroke-linecap","round"),b(t,"stroke-opacity",s[4]),b(a,"fill","black"),b(a,"class","svelte-1t43067"),re(l,"xlink:href",u="#"+s[17].id),b(l,"startOffset",h=s[7]+"%"),re(m,"xlink:href",E="#"+s[17].id),b(m,"startOffset",s[8]),b(m,"fill",s[3]),b(m,"opacity",y=s[4]*1.3),b(o,"class","svelte-1t43067"),b(e,"stroke",s[6]),b(e,"stroke-opacity",s[5])},m(_,k){D(_,e,k),H(e,t),H(e,o),H(o,l),H(l,a),H(a,f),H(l,d),H(o,m),H(m,O)},p(_,k){var S,z,F,L,W,j;k&1&&n!==(n=_[10](_[17]))&&b(t,"d",n),k&1&&i!==(i=_[17].id)&&b(t,"id",i),k&4&&b(t,"stroke-width",_[2]),k&2&&b(t,"stroke",_[1]),k&16&&b(t,"stroke-opacity",_[4]),k&1&&r!==(r=((F=(z=(S=_[17])==null?void 0:S.opts)==null?void 0:z.label)!=null&&F.enabled?(j=(W=(L=_[17])==null?void 0:L.opts)==null?void 0:W.label)==null?void 0:j.value:"")+"")&&Ze(f,r),k&1&&u!==(u="#"+_[17].id)&&re(l,"xlink:href",u),k&128&&h!==(h=_[7]+"%")&&b(l,"startOffset",h),k&1&&E!==(E="#"+_[17].id)&&re(m,"xlink:href",E),k&256&&b(m,"startOffset",_[8]),k&8&&b(m,"fill",_[3]),k&16&&y!==(y=_[4]*1.3)&&b(m,"opacity",y),k&64&&b(e,"stroke",_[6]),k&32&&b(e,"stroke-opacity",_[5])},d(_){_&&C(e)}}}function Ie(s){let e,t=s[17]&&s[9]&&Me(s);return{c(){t&&t.c(),e=ae()},l(n){t&&t.l(n),e=ae()},m(n,i){t&&t.m(n,i),D(n,e,i)},p(n,i){n[17]&&n[9]?t?t.p(n,i):(t=Me(n),t.c(),t.m(e.parentNode,e)):t&&(t.d(1),t=null)},d(n){t&&t.d(n),n&&C(e)}}}function pt(s){let e,t=s[9]&&s[0]&&s[0].length>0&&ze(s);return{c(){t&&t.c(),e=ae()},l(n){t&&t.l(n),e=ae()},m(n,i){t&&t.m(n,i),D(n,e,i)},p(n,[i]){n[9]&&n[0]&&n[0].length>0?t?t.p(n,i):(t=ze(n),t.c(),t.m(e.parentNode,e)):t&&(t.d(1),t=null)},i:G,o:G,d(n){t&&t.d(n),n&&C(e)}}}function kt(s,e,t){let{links:n}=e,{calcOffsetFromCanvas:i}=e,{strokeColor:o="green"}=e,{strokeWidth:l=1}=e,{arrowColor:a="green"}=e,{strokeOpacity:r="0.3"}=e,{groupStrokeOpacity:f="0.1"}=e,{groupStrokeColor:d="white"}=e,{textStartOffset:u=20}=e,{arrowStartOffset:h="40%"}=e;const m=gt(_t);let O,E,y,v,p;Qe(()=>{t(9,O=!0)});function B(w){let g=document.getElementById(w.source.id),c=document.getElementById(w.target.id);if(!g||!c)return;const{x:_,y:k}=i(g),{x:S,y:z}=i(c);return E=_+g.offsetWidth/2,y=k+g.offsetHeight/2,v=S+c.offsetWidth/2,p=z+c.offsetHeight/2,m({source:[E,y],target:[v,p]})}return s.$$set=w=>{"links"in w&&t(0,n=w.links),"calcOffsetFromCanvas"in w&&t(11,i=w.calcOffsetFromCanvas),"strokeColor"in w&&t(1,o=w.strokeColor),"strokeWidth"in w&&t(2,l=w.strokeWidth),"arrowColor"in w&&t(3,a=w.arrowColor),"strokeOpacity"in w&&t(4,r=w.strokeOpacity),"groupStrokeOpacity"in w&&t(5,f=w.groupStrokeOpacity),"groupStrokeColor"in w&&t(6,d=w.groupStrokeColor),"textStartOffset"in w&&t(7,u=w.textStartOffset),"arrowStartOffset"in w&&t(8,h=w.arrowStartOffset)},[n,o,l,a,r,f,d,u,h,O,B,i]}class Fe extends K{constructor(e){super(),x(this,e,kt,pt,$,{links:0,calcOffsetFromCanvas:11,strokeColor:1,strokeWidth:2,arrowColor:3,strokeOpacity:4,groupStrokeOpacity:5,groupStrokeColor:6,textStartOffset:7,arrowStartOffset:8})}}function He(s){let e;const t=s[7].default,n=ee(t,s,s[6],null),i=n||bt(s);return{c(){i&&i.c()},l(o){i&&i.l(o)},m(o,l){i&&i.m(o,l),e=!0},p(o,l){n?n.p&&(!e||l&64)&&te(n,t,o,o[6],e?ne(t,o[6],l,null):se(o[6]),null):i&&i.p&&(!e||l&4)&&i.p(o,e?l:-1)},i(o){e||(P(i,o),e=!0)},o(o){T(i,o),e=!1},d(o){i&&i.d(o)}}}function bt(s){let e,t;return{c(){e=X("div"),this.h()},l(n){e=V(n,"DIV",{style:!0,class:!0}),M(e).forEach(C),this.h()},h(){A(e,"transform","translate(-50%, -50%)"),b(e,"class",t="absolute border-["+(s[2]+"em")+"] md:border-["+(s[2]/2+"em")+"] border-yellow-200/40 ring-2 ring-black h-0 w-0 rounded-full")},m(n,i){D(n,e,i)},p(n,i){i&4&&t!==(t="absolute border-["+(n[2]+"em")+"] md:border-["+(n[2]/2+"em")+"] border-yellow-200/40 ring-2 ring-black h-0 w-0 rounded-full")&&b(e,"class",t)},d(n){n&&C(e)}}}function vt(s){let e,t,n,i,o,l,a=s[0]&&He(s);return{c(){e=X("div"),a&&a.c(),this.h()},l(r){e=V(r,"DIV",{id:!0,"data-highlighter":!0,class:!0,style:!0});var f=M(e);a&&a.l(f),f.forEach(C),this.h()},h(){b(e,"id",t=s[1].id+"--highlighter"),b(e,"data-highlighter","true"),b(e,"class",n="absolute border-["+(s[2]+"em")+"] md:border-["+(s[2]/2+"em")+"] border-transparent rounded-full p-0 m-0"),A(e,"top",s[5]+"px"),A(e,"left",s[4]+"px")},m(r,f){D(r,e,f),a&&a.m(e,null),s[9](e),i=!0,o||(l=[q(window,"resize",s[8]),q(e,"mouseover",s[10]),q(e,"mouseleave",s[11]),q(e,"focus",s[12]),q(e,"blur",s[13])],o=!0)},p(r,[f]){r[0]?a?(a.p(r,f),f&1&&P(a,1)):(a=He(r),a.c(),P(a,1),a.m(e,null)):a&&(le(),T(a,1,1,()=>{a=null}),oe()),(!i||f&2&&t!==(t=r[1].id+"--highlighter"))&&b(e,"id",t),(!i||f&4&&n!==(n="absolute border-["+(r[2]+"em")+"] md:border-["+(r[2]/2+"em")+"] border-transparent rounded-full p-0 m-0"))&&b(e,"class",n),(!i||f&32)&&A(e,"top",r[5]+"px"),(!i||f&16)&&A(e,"left",r[4]+"px")},i(r){i||(P(a),i=!0)},o(r){T(a),i=!1},d(r){r&&C(e),a&&a.d(),s[9](null),o=!1,qe(l)}}}function Et(s,e,t){let n,i,{$$slots:o={},$$scope:l}=e,{node:a}=e,{zoneSize:r=2}=e,{highlight:f=!1}=e,d;const u=v=>{t(5,n),t(3,d),t(1,a),t(4,i),t(3,d),t(1,a)};function h(v){ie[v?"unshift":"push"](()=>{d=v,t(3,d)})}const m=v=>{t(0,f=!0)},O=v=>{t(0,f=!1)},E=v=>{t(0,f=!0)},y=v=>{t(0,f=!1)};return s.$$set=v=>{"node"in v&&t(1,a=v.node),"zoneSize"in v&&t(2,r=v.zoneSize),"highlight"in v&&t(0,f=v.highlight),"$$scope"in v&&t(6,l=v.$$scope)},s.$$.update=()=>{s.$$.dirty&10&&t(5,n=d?-d.offsetHeight/2+a.offsetHeight/2:0),s.$$.dirty&10&&t(4,i=d?-d.offsetWidth/2+a.offsetWidth/2:0),s.$$.dirty&10&&d&&a.insertAdjacentElement("beforeend",d)},[f,a,r,d,i,n,l,o,u,h,m,O,E,y]}class wt extends K{constructor(e){super(),x(this,e,Et,vt,$,{node:1,zoneSize:2,highlight:0})}}const Ot=wt,Be=(s,e,t=!1)=>{const n=s.find(o=>o.id==e);if(!n||!n.value)return"";if(!t)return n.value+" to";const i=s.find(o=>o.id==t);return i?`${n.value} to ${i.value}`:n.value},{window:Lt}=Ke;function De(s,e,t){const n=s.slice();return n[18]=e[t][0],n[19]=e[t][1].node,n[20]=e[t][1].highlight,n}const Ct=s=>({}),Ae=s=>({connectable:s[10]}),Pt=s=>({}),We=s=>({connectable:s[10]});function Xe(s){let e,t,n;function i(l){s[13](l)}let o={left:s[7],top:s[8],id:Je,$$slots:{default:[St]},$$scope:{ctx:s}};return s[5]!==void 0&&(o.marker=s[5]),e=new ot({props:o}),ie.push(()=>xe(e,"marker",i)),{c(){fe(e.$$.fragment)},l(l){ue(e.$$.fragment,l)},m(l,a){he(e,l,a),n=!0},p(l,a){const r={};a&128&&(r.left=l[7]),a&256&&(r.top=l[8]),a&32768&&(r.$$scope={dirty:a,ctx:l}),!t&&a&32&&(t=!0,r.marker=l[5],$e(()=>t=!1)),e.$set(r)},i(l){n||(P(e.$$.fragment,l),n=!0)},o(l){T(e.$$.fragment,l),n=!1},d(l){ce(e,l)}}}function yt(s){let e;return{c(){e=X("div"),this.h()},l(t){e=V(t,"DIV",{class:!0}),M(e).forEach(C),this.h()},h(){b(e,"class","h-32 w-32 md:h-16 md:w-16 p-8 rounded-full shadow-xl opacity-80 select-none border-[4em] md:border-[2em] ")},m(t,n){D(t,e,n)},p:G,d(t){t&&C(e)}}}function St(s){let e;const t=s[11].marker,n=ee(t,s,s[15],We),i=n||yt();return{c(){i&&i.c()},l(o){i&&i.l(o)},m(o,l){i&&i.m(o,l),e=!0},p(o,l){n&&n.p&&(!e||l&32768)&&te(n,t,o,o[15],e?ne(t,o[15],l,Pt):se(o[15]),We)},i(o){e||(P(i,o),e=!0)},o(o){T(i,o),e=!1},d(o){i&&i.d(o)}}}function Ve(s){let e;const t=s[11].default,n=ee(t,s,s[15],Ae);return{c(){n&&n.c()},l(i){n&&n.l(i)},m(i,o){n&&n.m(i,o),e=!0},p(i,o){n&&n.p&&(!e||o&32768)&&te(n,t,i,i[15],e?ne(t,i[15],o,Ct):se(i[15]),Ae)},i(i){e||(P(n,i),e=!0)},o(i){T(n,i),e=!1},d(i){n&&n.d(i)}}}function Ne(s){let e,t;return e=new Ot({props:{node:s[19],highlight:s[20]}}),{c(){fe(e.$$.fragment)},l(n){ue(e.$$.fragment,n)},m(n,i){he(e,n,i),t=!0},p(n,i){const o={};i&4&&(o.node=n[19]),i&4&&(o.highlight=n[20]),e.$set(o)},i(n){t||(P(e.$$.fragment,n),t=!0)},o(n){T(e.$$.fragment,n),t=!1},d(n){ce(e,n)}}}function Tt(s){var w,g;let e,t,n,i,o,l,a,r,f,d,u=s[4]&&Xe(s),h=s[3]&&Ve(s);const m=[{links:[s[6]]},{calcOffsetFromCanvas:s[9]},(w=s[1])==null?void 0:w.links];let O={};for(let c=0;c<m.length;c+=1)O=Le(O,m[c]);i=new Fe({props:O});const E=[{links:s[0].links},{calcOffsetFromCanvas:s[9]},(g=s[1])==null?void 0:g.links];let y={};for(let c=0;c<E.length;c+=1)y=Le(y,E[c]);l=new Fe({props:y});let v=[...Object.entries(s[2])],p=[];for(let c=0;c<v.length;c+=1)p[c]=Ne(De(s,v,c));const B=c=>T(p[c],1,1,()=>{p[c]=null});return{c(){e=X("div"),u&&u.c(),t=J(),h&&h.c(),n=J(),fe(i.$$.fragment),o=J(),fe(l.$$.fragment),a=J();for(let c=0;c<p.length;c+=1)p[c].c();this.h()},l(c){e=V(c,"DIV",{class:!0});var _=M(e);u&&u.l(_),t=Q(_),h&&h.l(_),n=Q(_),ue(i.$$.fragment,_),o=Q(_),ue(l.$$.fragment,_),a=Q(_);for(let k=0;k<p.length;k+=1)p[k].l(_);_.forEach(C),this.h()},h(){b(e,"class","relative")},m(c,_){D(c,e,_),u&&u.m(e,null),H(e,t),h&&h.m(e,null),H(e,n),he(i,e,null),H(e,o),he(l,e,null),H(e,a);for(let k=0;k<p.length;k+=1)p[k].m(e,null);s[14](e),r=!0,f||(d=q(Lt,"resize",s[12]),f=!0)},p(c,[_]){var z,F;c[4]?u?(u.p(c,_),_&16&&P(u,1)):(u=Xe(c),u.c(),P(u,1),u.m(e,t)):u&&(le(),T(u,1,1,()=>{u=null}),oe()),c[3]?h?(h.p(c,_),_&8&&P(h,1)):(h=Ve(c),h.c(),P(h,1),h.m(e,n)):h&&(le(),T(h,1,1,()=>{h=null}),oe());const k=_&578?Ce(m,[_&64&&{links:[c[6]]},_&512&&{calcOffsetFromCanvas:c[9]},_&2&&Pe((z=c[1])==null?void 0:z.links)]):{};i.$set(k);const S=_&515?Ce(E,[_&1&&{links:c[0].links},_&512&&{calcOffsetFromCanvas:c[9]},_&2&&Pe((F=c[1])==null?void 0:F.links)]):{};if(l.$set(S),_&4){v=[...Object.entries(c[2])];let L;for(L=0;L<v.length;L+=1){const W=De(c,v,L);p[L]?(p[L].p(W,_),P(p[L],1)):(p[L]=Ne(W),p[L].c(),P(p[L],1),p[L].m(e,null))}for(le(),L=v.length;L<p.length;L+=1)B(L);oe()}},i(c){if(!r){P(u),P(h),P(i.$$.fragment,c),P(l.$$.fragment,c);for(let _=0;_<v.length;_+=1)P(p[_]);r=!0}},o(c){T(u),T(h),T(i.$$.fragment,c),T(l.$$.fragment,c),p=p.filter(Boolean);for(let _=0;_<p.length;_+=1)T(p[_]);r=!1},d(c){c&&C(e),u&&u.d(),h&&h.d(),ce(i),ce(l),Ue(p,c),s[14](null),f=!1,d()}}}const Je="marker";function zt(s,e,t){let{$$slots:n={},$$scope:i}=e,{data:o}=e,{opts:l={}}=e;const a=Ge();let r={},f,d,u,h=null,m=0,O=0;function E(g,c){c.stopPropagation(),c.preventDefault(),t(7,m=g.pageX-f.offsetLeft),t(8,O=g.pageY-f.offsetTop)}function y(g){if(!g)return;if(g==f)return{x:g.offsetLeft,y:g.offsetTop};let c=g.getBoundingClientRect().top,_=f.getBoundingClientRect().top,k=c-_,S=g.getBoundingClientRect().left,z=f.getBoundingClientRect().left;return{x:S-z,y:k}}function v(g,c){var z,F;g.id||(g.id=nt()),g.style.position||(g.style.position="relative");let _=!1,k;t(2,r[g.id]={node:g,highlight:_},r);let S;return c!=null&&c.dataset&&(g.dataset.dataset=JSON.stringify(c.dataset)),(z=c==null?void 0:c.restrictions)!=null&&z.startOnly||(g.dataset.dropzone=!0),(F=c==null?void 0:c.restrictions)!=null&&F.dropOnly||(S=new st(g,{start(L,W){return S.currentPointers.length===1?!1:(t(4,d=!0),E(L,W),!0)},move(L,W,j){var _e;E(S.currentPointers[0],j),t(6,h={id:g.id+"-to-",source:{id:g.id},target:{id:Je},opts:{label:{enabled:!0,value:Be(o.nodes,g.id)}}}),k&&t(2,r[k.id].highlight=!1,r),k=((_e=document.elementFromPoint(S.currentPointers[0].clientX,S.currentPointers[0].clientY))==null?void 0:_e.closest("[data-dropzone]"))||null,k!=null&&k.id&&t(2,r[k.id].highlight=!0,r)},end:(L,W,j)=>{var be,ve;t(5,u.style.display="none",u),t(4,d=!1),r&&k&&k.id&&r[k.id].highlight&&t(2,r[k.id].highlight=!1,r),k=null;let I=document.elementFromPoint(L.clientX,L.clientY).closest("[data-dropzone]");if(t(6,h=null),!I||!(I!=null&&I.id)||!g||!(g!=null&&g.id))return;const ke={id:g.id+"-to-"+I.id,source:{id:g.id},target:{id:I.id},opts:{label:{enabled:!0,value:Be(o.nodes,g.id,I.id)}}};if(console.log({newLink:ke}),t(0,o.links=[...o.links,ke],o),(c==null?void 0:c.dataset)||((be=I==null?void 0:I.dataset)==null?void 0:be.dataset)){const Ee={source:{dataset:(c==null?void 0:c.dataset)||null},target:{dataset:(ve=I==null?void 0:I.dataset)!=null&&ve.dataset?JSON.parse(I.dataset.dataset):null}};console.log(Ee),a("connected",Ee)}},avoidPointerEvents:!0,eventListenerOptions:{capture:!0,passive:!1}})),{update(L){},destroy(){}}}const p=g=>{t(0,o)};function B(g){u=g,t(5,u)}function w(g){ie[g?"unshift":"push"](()=>{f=g,t(3,f)})}return s.$$set=g=>{"data"in g&&t(0,o=g.data),"opts"in g&&t(1,l=g.opts),"$$scope"in g&&t(15,i=g.$$scope)},[o,l,r,f,d,u,h,m,O,y,v,n,p,B,w,i]}class Mt extends K{constructor(e){super(),x(this,e,zt,Tt,$,{data:0,opts:1})}}const At=Mt;function It(s){let e;return{c(){e=X("div"),this.h()},l(t){e=V(t,"DIV",{class:!0}),M(e).forEach(C),this.h()},h(){b(e,"class","flex h-4 w-4 border-2 bg-blue-500 rounded-full border-blue-300 hover:ring hover:ring-blue-800")},m(t,n){D(t,e,n)},p:G,d(t){t&&C(e)}}}function Ft(s){let e,t,n,i,o,l,a,r;const f=s[11].default,d=ee(f,s,s[10],null),u=d||It();return{c(){e=X("div"),t=X("div"),u&&u.c(),this.h()},l(h){e=V(h,"DIV",{class:!0,style:!0});var m=M(e);t=V(m,"DIV",{class:!0});var O=M(t);u&&u.l(O),O.forEach(C),m.forEach(C),this.h()},h(){b(t,"class","relative"),b(e,"class","flex absolute EndPoint"),b(e,"style",i="top: "+s[8]+"px; "+(s[0]=="right"?`right: ${s[7]}px;`:`left: ${s[6]}px;`)),Ye(()=>s[14].call(e))},m(h,m){D(h,e,m),H(e,t),u&&u.m(t,null),s[13](e),o=Re(e,s[14].bind(e)),l=!0,a||(r=[q(window,"resize",s[12]),et(n=s[1].call(null,t,s[2]))],a=!0)},p(h,[m]){d&&d.p&&(!l||m&1024)&&te(d,f,h,h[10],l?ne(f,h[10],m,null):se(h[10]),null),n&&tt(n.update)&&m&4&&n.update.call(null,h[2]),(!l||m&449&&i!==(i="top: "+h[8]+"px; "+(h[0]=="right"?`right: ${h[7]}px;`:`left: ${h[6]}px;`)))&&b(e,"style",i)},i(h){l||(P(u,h),l=!0)},o(h){T(u,h),l=!1},d(h){h&&C(e),u&&u.d(h),s[13](null),o(),a=!1,qe(r)}}}function Ht(s,e,t){let n,i,o,{$$slots:l={},$$scope:a}=e,{position:r="right"}=e,{connectable:f}=e,{options:d={}}=e,u,h,m,O;const E=p=>{t(8,n),t(9,O),t(4,h),t(3,u),t(6,o),t(5,m),t(7,i),t(5,m)};function y(p){ie[p?"unshift":"push"](()=>{u=p,t(3,u)})}function v(){m=this.offsetWidth,h=this.offsetHeight,t(5,m),t(4,h)}return s.$$set=p=>{"position"in p&&t(0,r=p.position),"connectable"in p&&t(1,f=p.connectable),"options"in p&&t(2,d=p.options),"$$scope"in p&&t(10,a=p.$$scope)},s.$$.update=()=>{s.$$.dirty&8&&u&&(t(3,u.parentNode.style.position="relative",u),t(9,O=u.parentNode.offsetHeight)),s.$$.dirty&528&&t(8,n=O&&h?O/2-h/2:0),s.$$.dirty&32&&t(7,i=m?-m/2:0),s.$$.dirty&32&&t(6,o=m?-m/2:0)},[r,f,d,u,h,m,o,i,n,O,a,l,E,y,v]}class Bt extends K{constructor(e){super(),x(this,e,Ht,Ft,$,{position:0,connectable:1,options:2})}}const Wt=Bt;export{At as Canvas,Wt as EndPoint,Ot as Highlighter,Be as generateLinkLabel};
+import { S as SvelteComponent, i as init, s as safe_not_equal, F as create_slot, l as element, m as claim_element, n as children, h as detach, p as attr, q as set_style, a1 as add_render_callback, b as insert_hydration, aa as add_resize_listener, G as update_slot_base, H as get_all_dirty_from_scope, I as get_slot_changes, f as transition_in, t as transition_out, _ as binding_callbacks, E as noop$1, e as empty, o as onMount, N as svg_element, O as claim_svg_element, Z as destroy_each, r as text, a as space, u as claim_text, c as claim_space, a4 as xlink_attr, J as append_hydration, v as set_data, M as listen, g as group_outros, d as check_outros, a7 as run_all, C as assign, w as create_component, x as claim_component, y as mount_component, z as get_spread_update, A as get_spread_object, B as destroy_component, R as createEventDispatcher, ab as globals, $ as bind, a0 as add_flush_callback, a6 as action_destroyer, Q as is_function } from "./index-ef46e954.js";
+class Pointer {
+  constructor(nativePointer) {
+    this.id = -1;
+    this.nativePointer = nativePointer;
+    this.pageX = nativePointer.pageX;
+    this.pageY = nativePointer.pageY;
+    this.clientX = nativePointer.clientX;
+    this.clientY = nativePointer.clientY;
+    if (self.Touch && nativePointer instanceof Touch) {
+      this.id = nativePointer.identifier;
+    } else if (isPointerEvent(nativePointer)) {
+      this.id = nativePointer.pointerId;
+    }
+  }
+  getCoalesced() {
+    if ("getCoalescedEvents" in this.nativePointer) {
+      const events = this.nativePointer.getCoalescedEvents().map((p) => new Pointer(p));
+      if (events.length > 0)
+        return events;
+    }
+    return [this];
+  }
+}
+const isPointerEvent = (event) => "pointerId" in event;
+const isTouchEvent = (event) => "changedTouches" in event;
+const noop = () => {
+};
+class PointerTracker {
+  constructor(_element, { start = () => true, move = noop, end = noop, rawUpdates = false, avoidPointerEvents = false, eventListenerOptions = { capture: false, passive: false, once: false } } = {}) {
+    this._element = _element;
+    this.startPointers = [];
+    this.currentPointers = [];
+    this._excludeFromButtonsCheck = /* @__PURE__ */ new Set();
+    this._pointerStart = (event) => {
+      if (isPointerEvent(event) && event.buttons === 0) {
+        this._excludeFromButtonsCheck.add(event.pointerId);
+      } else if (!(event.buttons & 1)) {
+        return;
+      }
+      const pointer = new Pointer(event);
+      if (this.currentPointers.some((p) => p.id === pointer.id))
+        return;
+      if (!this._triggerPointerStart(pointer, event))
+        return;
+      if (isPointerEvent(event)) {
+        const capturingElement = event.target && "setPointerCapture" in event.target ? event.target : this._element;
+        capturingElement.setPointerCapture(event.pointerId);
+        this._element.addEventListener(this._rawUpdates ? "pointerrawupdate" : "pointermove", this._move, this._eventListenerOptions);
+        this._element.addEventListener("pointerup", this._pointerEnd, this._eventListenerOptions);
+        this._element.addEventListener("pointercancel", this._pointerEnd, this._eventListenerOptions);
+      } else {
+        window.addEventListener("mousemove", this._move);
+        window.addEventListener("mouseup", this._pointerEnd);
+      }
+    };
+    this._touchStart = (event) => {
+      for (const touch of Array.from(event.changedTouches)) {
+        this._triggerPointerStart(new Pointer(touch), event);
+      }
+    };
+    this._move = (event) => {
+      if (!isTouchEvent(event) && (!isPointerEvent(event) || !this._excludeFromButtonsCheck.has(event.pointerId)) && event.buttons === 0) {
+        this._pointerEnd(event);
+        return;
+      }
+      const previousPointers = this.currentPointers.slice();
+      const changedPointers = isTouchEvent(event) ? Array.from(event.changedTouches).map((t) => new Pointer(t)) : [new Pointer(event)];
+      const trackedChangedPointers = [];
+      for (const pointer of changedPointers) {
+        const index = this.currentPointers.findIndex((p) => p.id === pointer.id);
+        if (index === -1)
+          continue;
+        trackedChangedPointers.push(pointer);
+        this.currentPointers[index] = pointer;
+      }
+      if (trackedChangedPointers.length === 0)
+        return;
+      this._moveCallback(previousPointers, trackedChangedPointers, event);
+    };
+    this._triggerPointerEnd = (pointer, event) => {
+      if (!isTouchEvent(event) && event.buttons & 1) {
+        return false;
+      }
+      const index = this.currentPointers.findIndex((p) => p.id === pointer.id);
+      if (index === -1)
+        return false;
+      this.currentPointers.splice(index, 1);
+      this.startPointers.splice(index, 1);
+      this._excludeFromButtonsCheck.delete(pointer.id);
+      const cancelled = !(event.type === "mouseup" || event.type === "touchend" || event.type === "pointerup");
+      this._endCallback(pointer, event, cancelled);
+      return true;
+    };
+    this._pointerEnd = (event) => {
+      if (!this._triggerPointerEnd(new Pointer(event), event))
+        return;
+      if (isPointerEvent(event)) {
+        if (this.currentPointers.length)
+          return;
+        this._element.removeEventListener(this._rawUpdates ? "pointerrawupdate" : "pointermove", this._move);
+        this._element.removeEventListener("pointerup", this._pointerEnd);
+        this._element.removeEventListener("pointercancel", this._pointerEnd);
+      } else {
+        window.removeEventListener("mousemove", this._move);
+        window.removeEventListener("mouseup", this._pointerEnd);
+      }
+    };
+    this._touchEnd = (event) => {
+      for (const touch of Array.from(event.changedTouches)) {
+        this._triggerPointerEnd(new Pointer(touch), event);
+      }
+    };
+    this._startCallback = start;
+    this._moveCallback = move;
+    this._endCallback = end;
+    this._rawUpdates = rawUpdates && "onpointerrawupdate" in window;
+    this._eventListenerOptions = eventListenerOptions;
+    if (self.PointerEvent && !avoidPointerEvents) {
+      this._element.addEventListener("pointerdown", this._pointerStart, this._eventListenerOptions);
+    } else {
+      this._element.addEventListener("mousedown", this._pointerStart, this._eventListenerOptions);
+      this._element.addEventListener("touchstart", this._touchStart, this._eventListenerOptions);
+      this._element.addEventListener("touchmove", this._move, this._eventListenerOptions);
+      this._element.addEventListener("touchend", this._touchEnd, this._eventListenerOptions);
+      this._element.addEventListener("touchcancel", this._touchEnd, this._eventListenerOptions);
+    }
+  }
+  stop() {
+    this._element.removeEventListener("pointerdown", this._pointerStart);
+    this._element.removeEventListener("mousedown", this._pointerStart);
+    this._element.removeEventListener("touchstart", this._touchStart);
+    this._element.removeEventListener("touchmove", this._move);
+    this._element.removeEventListener("touchend", this._touchEnd);
+    this._element.removeEventListener("touchcancel", this._touchEnd);
+    this._element.removeEventListener(this._rawUpdates ? "pointerrawupdate" : "pointermove", this._move);
+    this._element.removeEventListener("pointerup", this._pointerEnd);
+    this._element.removeEventListener("pointercancel", this._pointerEnd);
+    window.removeEventListener("mousemove", this._move);
+    window.removeEventListener("mouseup", this._pointerEnd);
+  }
+  _triggerPointerStart(pointer, event) {
+    if (!this._startCallback(pointer, event))
+      return false;
+    this.currentPointers.push(pointer);
+    this.startPointers.push(pointer);
+    return true;
+  }
+}
+let nanoid = (size = 21) => crypto.getRandomValues(new Uint8Array(size)).reduce((id, byte) => {
+  byte &= 63;
+  if (byte < 36) {
+    id += byte.toString(36);
+  } else if (byte < 62) {
+    id += (byte - 26).toString(36).toUpperCase();
+  } else if (byte > 62) {
+    id += "-";
+  } else {
+    id += "_";
+  }
+  return id;
+}, "");
+function fallback_block$3(ctx) {
+  let div;
+  return {
+    c() {
+      div = element("div");
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      children(div).forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "class", "h-16 w-16 p-8 rounded-full shadow-xl opacity-80 select-none border-[2em] border-pink-500/50");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+    },
+    p: noop$1,
+    d(detaching) {
+      if (detaching)
+        detach(div);
+    }
+  };
+}
+function create_fragment$4(ctx) {
+  let div;
+  let div_resize_listener;
+  let current;
+  const default_slot_template = ctx[9].default;
+  const default_slot = create_slot(default_slot_template, ctx, ctx[8], null);
+  const default_slot_or_fallback = default_slot || fallback_block$3();
+  return {
+    c() {
+      div = element("div");
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.c();
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { id: true, class: true, style: true });
+      var div_nodes = children(div);
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.l(div_nodes);
+      div_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "id", ctx[1]);
+      attr(div, "class", "absolute");
+      set_style(div, "left", ctx[5] + "px");
+      set_style(div, "top", ctx[4] + "px");
+      add_render_callback(() => ctx[11].call(div));
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+      if (default_slot_or_fallback) {
+        default_slot_or_fallback.m(div, null);
+      }
+      ctx[10](div);
+      div_resize_listener = add_resize_listener(div, ctx[11].bind(div));
+      current = true;
+    },
+    p(ctx2, [dirty]) {
+      if (default_slot) {
+        if (default_slot.p && (!current || dirty & 256)) {
+          update_slot_base(
+            default_slot,
+            default_slot_template,
+            ctx2,
+            ctx2[8],
+            !current ? get_all_dirty_from_scope(ctx2[8]) : get_slot_changes(default_slot_template, ctx2[8], dirty, null),
+            null
+          );
+        }
+      }
+      if (!current || dirty & 2) {
+        attr(div, "id", ctx2[1]);
+      }
+      if (!current || dirty & 32) {
+        set_style(div, "left", ctx2[5] + "px");
+      }
+      if (!current || dirty & 16) {
+        set_style(div, "top", ctx2[4] + "px");
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(default_slot_or_fallback, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(default_slot_or_fallback, local);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching)
+        detach(div);
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.d(detaching);
+      ctx[10](null);
+      div_resize_listener();
+    }
+  };
+}
+function instance$4($$self, $$props, $$invalidate) {
+  let x2;
+  let y2;
+  let { $$slots: slots = {}, $$scope } = $$props;
+  let { marker } = $$props;
+  let { id } = $$props;
+  let { left } = $$props;
+  let { top } = $$props;
+  let offsetWidth;
+  let offsetHeight;
+  function div_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      marker = $$value;
+      $$invalidate(0, marker);
+    });
+  }
+  function div_elementresize_handler() {
+    offsetWidth = this.offsetWidth;
+    offsetHeight = this.offsetHeight;
+    $$invalidate(2, offsetWidth);
+    $$invalidate(3, offsetHeight);
+  }
+  $$self.$$set = ($$props2) => {
+    if ("marker" in $$props2)
+      $$invalidate(0, marker = $$props2.marker);
+    if ("id" in $$props2)
+      $$invalidate(1, id = $$props2.id);
+    if ("left" in $$props2)
+      $$invalidate(6, left = $$props2.left);
+    if ("top" in $$props2)
+      $$invalidate(7, top = $$props2.top);
+    if ("$$scope" in $$props2)
+      $$invalidate(8, $$scope = $$props2.$$scope);
+  };
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & 68) {
+      $$invalidate(5, x2 = left - offsetWidth / 2);
+    }
+    if ($$self.$$.dirty & 136) {
+      $$invalidate(4, y2 = top - offsetHeight / 2);
+    }
+  };
+  return [
+    marker,
+    id,
+    offsetWidth,
+    offsetHeight,
+    y2,
+    x2,
+    left,
+    top,
+    $$scope,
+    slots,
+    div_binding,
+    div_elementresize_handler
+  ];
+}
+class CursorMarker extends SvelteComponent {
+  constructor(options) {
+    super();
+    init(this, options, instance$4, create_fragment$4, safe_not_equal, { marker: 0, id: 1, left: 6, top: 7 });
+  }
+}
+const pi = Math.PI, tau = 2 * pi, epsilon = 1e-6, tauEpsilon = tau - epsilon;
+function Path() {
+  this._x0 = this._y0 = this._x1 = this._y1 = null;
+  this._ = "";
+}
+function path() {
+  return new Path();
+}
+Path.prototype = path.prototype = {
+  constructor: Path,
+  moveTo: function(x2, y2) {
+    this._ += "M" + (this._x0 = this._x1 = +x2) + "," + (this._y0 = this._y1 = +y2);
+  },
+  closePath: function() {
+    if (this._x1 !== null) {
+      this._x1 = this._x0, this._y1 = this._y0;
+      this._ += "Z";
+    }
+  },
+  lineTo: function(x2, y2) {
+    this._ += "L" + (this._x1 = +x2) + "," + (this._y1 = +y2);
+  },
+  quadraticCurveTo: function(x1, y1, x2, y2) {
+    this._ += "Q" + +x1 + "," + +y1 + "," + (this._x1 = +x2) + "," + (this._y1 = +y2);
+  },
+  bezierCurveTo: function(x1, y1, x2, y2, x3, y3) {
+    this._ += "C" + +x1 + "," + +y1 + "," + +x2 + "," + +y2 + "," + (this._x1 = +x3) + "," + (this._y1 = +y3);
+  },
+  arcTo: function(x1, y1, x2, y2, r) {
+    x1 = +x1, y1 = +y1, x2 = +x2, y2 = +y2, r = +r;
+    var x0 = this._x1, y0 = this._y1, x21 = x2 - x1, y21 = y2 - y1, x01 = x0 - x1, y01 = y0 - y1, l01_2 = x01 * x01 + y01 * y01;
+    if (r < 0)
+      throw new Error("negative radius: " + r);
+    if (this._x1 === null) {
+      this._ += "M" + (this._x1 = x1) + "," + (this._y1 = y1);
+    } else if (!(l01_2 > epsilon))
+      ;
+    else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon) || !r) {
+      this._ += "L" + (this._x1 = x1) + "," + (this._y1 = y1);
+    } else {
+      var x20 = x2 - x0, y20 = y2 - y0, l21_2 = x21 * x21 + y21 * y21, l20_2 = x20 * x20 + y20 * y20, l21 = Math.sqrt(l21_2), l01 = Math.sqrt(l01_2), l = r * Math.tan((pi - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2), t01 = l / l01, t21 = l / l21;
+      if (Math.abs(t01 - 1) > epsilon) {
+        this._ += "L" + (x1 + t01 * x01) + "," + (y1 + t01 * y01);
+      }
+      this._ += "A" + r + "," + r + ",0,0," + +(y01 * x20 > x01 * y20) + "," + (this._x1 = x1 + t21 * x21) + "," + (this._y1 = y1 + t21 * y21);
+    }
+  },
+  arc: function(x2, y2, r, a0, a1, ccw) {
+    x2 = +x2, y2 = +y2, r = +r, ccw = !!ccw;
+    var dx = r * Math.cos(a0), dy = r * Math.sin(a0), x0 = x2 + dx, y0 = y2 + dy, cw = 1 ^ ccw, da = ccw ? a0 - a1 : a1 - a0;
+    if (r < 0)
+      throw new Error("negative radius: " + r);
+    if (this._x1 === null) {
+      this._ += "M" + x0 + "," + y0;
+    } else if (Math.abs(this._x1 - x0) > epsilon || Math.abs(this._y1 - y0) > epsilon) {
+      this._ += "L" + x0 + "," + y0;
+    }
+    if (!r)
+      return;
+    if (da < 0)
+      da = da % tau + tau;
+    if (da > tauEpsilon) {
+      this._ += "A" + r + "," + r + ",0,1," + cw + "," + (x2 - dx) + "," + (y2 - dy) + "A" + r + "," + r + ",0,1," + cw + "," + (this._x1 = x0) + "," + (this._y1 = y0);
+    } else if (da > epsilon) {
+      this._ += "A" + r + "," + r + ",0," + +(da >= pi) + "," + cw + "," + (this._x1 = x2 + r * Math.cos(a1)) + "," + (this._y1 = y2 + r * Math.sin(a1));
+    }
+  },
+  rect: function(x2, y2, w, h) {
+    this._ += "M" + (this._x0 = this._x1 = +x2) + "," + (this._y0 = this._y1 = +y2) + "h" + +w + "v" + +h + "h" + -w + "Z";
+  },
+  toString: function() {
+    return this._;
+  }
+};
+function constant(x2) {
+  return function constant2() {
+    return x2;
+  };
+}
+var slice = Array.prototype.slice;
+function x(p) {
+  return p[0];
+}
+function y(p) {
+  return p[1];
+}
+class Bump {
+  constructor(context, x2) {
+    this._context = context;
+    this._x = x2;
+  }
+  areaStart() {
+    this._line = 0;
+  }
+  areaEnd() {
+    this._line = NaN;
+  }
+  lineStart() {
+    this._point = 0;
+  }
+  lineEnd() {
+    if (this._line || this._line !== 0 && this._point === 1)
+      this._context.closePath();
+    this._line = 1 - this._line;
+  }
+  point(x2, y2) {
+    x2 = +x2, y2 = +y2;
+    switch (this._point) {
+      case 0: {
+        this._point = 1;
+        if (this._line)
+          this._context.lineTo(x2, y2);
+        else
+          this._context.moveTo(x2, y2);
+        break;
+      }
+      case 1:
+        this._point = 2;
+      default: {
+        if (this._x)
+          this._context.bezierCurveTo(this._x0 = (this._x0 + x2) / 2, this._y0, this._x0, y2, x2, y2);
+        else
+          this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y2) / 2, x2, this._y0, x2, y2);
+        break;
+      }
+    }
+    this._x0 = x2, this._y0 = y2;
+  }
+}
+function bumpX(context) {
+  return new Bump(context, true);
+}
+function linkSource(d) {
+  return d.source;
+}
+function linkTarget(d) {
+  return d.target;
+}
+function link(curve) {
+  let source = linkSource;
+  let target = linkTarget;
+  let x$1 = x;
+  let y$1 = y;
+  let context = null;
+  let output = null;
+  function link2() {
+    let buffer;
+    const argv = slice.call(arguments);
+    const s = source.apply(this, argv);
+    const t = target.apply(this, argv);
+    if (context == null)
+      output = curve(buffer = path());
+    output.lineStart();
+    argv[0] = s, output.point(+x$1.apply(this, argv), +y$1.apply(this, argv));
+    argv[0] = t, output.point(+x$1.apply(this, argv), +y$1.apply(this, argv));
+    output.lineEnd();
+    if (buffer)
+      return output = null, buffer + "" || null;
+  }
+  link2.source = function(_) {
+    return arguments.length ? (source = _, link2) : source;
+  };
+  link2.target = function(_) {
+    return arguments.length ? (target = _, link2) : target;
+  };
+  link2.x = function(_) {
+    return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant(+_), link2) : x$1;
+  };
+  link2.y = function(_) {
+    return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant(+_), link2) : y$1;
+  };
+  link2.context = function(_) {
+    return arguments.length ? (_ == null ? context = output = null : output = curve(context = _), link2) : context;
+  };
+  return link2;
+}
+const Links_svelte_svelte_type_style_lang = "";
+function get_each_context$1(ctx, list, i) {
+  const child_ctx = ctx.slice();
+  child_ctx[17] = list[i];
+  child_ctx[19] = i;
+  return child_ctx;
+}
+function create_if_block$2(ctx) {
+  let svg;
+  let each_value = ctx[0];
+  let each_blocks = [];
+  for (let i = 0; i < each_value.length; i += 1) {
+    each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+  }
+  return {
+    c() {
+      svg = svg_element("svg");
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].c();
+      }
+      this.h();
+    },
+    l(nodes) {
+      svg = claim_svg_element(nodes, "svg", { style: true, class: true });
+      var svg_nodes = children(svg);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].l(svg_nodes);
+      }
+      svg_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      set_style(svg, "pointer-events", "none");
+      attr(svg, "class", "svelte-1t43067");
+    },
+    m(target, anchor) {
+      insert_hydration(target, svg, anchor);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].m(svg, null);
+      }
+    },
+    p(ctx2, dirty) {
+      if (dirty & 2047) {
+        each_value = ctx2[0];
+        let i;
+        for (i = 0; i < each_value.length; i += 1) {
+          const child_ctx = get_each_context$1(ctx2, each_value, i);
+          if (each_blocks[i]) {
+            each_blocks[i].p(child_ctx, dirty);
+          } else {
+            each_blocks[i] = create_each_block$1(child_ctx);
+            each_blocks[i].c();
+            each_blocks[i].m(svg, null);
+          }
+        }
+        for (; i < each_blocks.length; i += 1) {
+          each_blocks[i].d(1);
+        }
+        each_blocks.length = each_value.length;
+      }
+    },
+    d(detaching) {
+      if (detaching)
+        detach(svg);
+      destroy_each(each_blocks, detaching);
+    }
+  };
+}
+function create_if_block_1$1(ctx) {
+  var _a, _b, _c, _d, _e, _f;
+  let g;
+  let path2;
+  let path_d_value;
+  let path_id_value;
+  let text_1;
+  let textPath0;
+  let tspan;
+  let t0_value = (((_c = (_b = (_a = ctx[17]) == null ? void 0 : _a.opts) == null ? void 0 : _b.label) == null ? void 0 : _c.enabled) ? (_f = (_e = (_d = ctx[17]) == null ? void 0 : _d.opts) == null ? void 0 : _e.label) == null ? void 0 : _f.value : "") + "";
+  let t0;
+  let t1;
+  let textPath0_xlink_href_value;
+  let textPath0_startOffset_value;
+  let textPath1;
+  let t2;
+  let textPath1_xlink_href_value;
+  let textPath1_opacity_value;
+  return {
+    c() {
+      g = svg_element("g");
+      path2 = svg_element("path");
+      text_1 = svg_element("text");
+      textPath0 = svg_element("textPath");
+      tspan = svg_element("tspan");
+      t0 = text(t0_value);
+      t1 = space();
+      textPath1 = svg_element("textPath");
+      t2 = text("\u27A4");
+      this.h();
+    },
+    l(nodes) {
+      g = claim_svg_element(nodes, "g", { stroke: true, "stroke-opacity": true });
+      var g_nodes = children(g);
+      path2 = claim_svg_element(g_nodes, "path", {
+        d: true,
+        id: true,
+        "stroke-width": true,
+        stroke: true,
+        fill: true,
+        "stroke-linecap": true,
+        "stroke-opacity": true
+      });
+      children(path2).forEach(detach);
+      text_1 = claim_svg_element(g_nodes, "text", { class: true });
+      var text_1_nodes = children(text_1);
+      textPath0 = claim_svg_element(text_1_nodes, "textPath", { "xlink:href": true, startOffset: true });
+      var textPath0_nodes = children(textPath0);
+      tspan = claim_svg_element(textPath0_nodes, "tspan", { fill: true, class: true });
+      var tspan_nodes = children(tspan);
+      t0 = claim_text(tspan_nodes, t0_value);
+      tspan_nodes.forEach(detach);
+      t1 = claim_space(textPath0_nodes);
+      textPath0_nodes.forEach(detach);
+      textPath1 = claim_svg_element(text_1_nodes, "textPath", {
+        "xlink:href": true,
+        startOffset: true,
+        fill: true,
+        opacity: true
+      });
+      var textPath1_nodes = children(textPath1);
+      t2 = claim_text(textPath1_nodes, "\u27A4");
+      textPath1_nodes.forEach(detach);
+      text_1_nodes.forEach(detach);
+      g_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(path2, "d", path_d_value = ctx[10](ctx[17]));
+      attr(path2, "id", path_id_value = ctx[17].id);
+      attr(path2, "stroke-width", ctx[2]);
+      attr(path2, "stroke", ctx[1]);
+      attr(path2, "fill", "none");
+      attr(path2, "stroke-linecap", "round");
+      attr(path2, "stroke-opacity", ctx[4]);
+      attr(tspan, "fill", "black");
+      attr(tspan, "class", "svelte-1t43067");
+      xlink_attr(textPath0, "xlink:href", textPath0_xlink_href_value = "#" + ctx[17].id);
+      attr(textPath0, "startOffset", textPath0_startOffset_value = ctx[7] + "%");
+      xlink_attr(textPath1, "xlink:href", textPath1_xlink_href_value = "#" + ctx[17].id);
+      attr(textPath1, "startOffset", ctx[8]);
+      attr(textPath1, "fill", ctx[3]);
+      attr(textPath1, "opacity", textPath1_opacity_value = ctx[4] * 1.3);
+      attr(text_1, "class", "svelte-1t43067");
+      attr(g, "stroke", ctx[6]);
+      attr(g, "stroke-opacity", ctx[5]);
+    },
+    m(target, anchor) {
+      insert_hydration(target, g, anchor);
+      append_hydration(g, path2);
+      append_hydration(g, text_1);
+      append_hydration(text_1, textPath0);
+      append_hydration(textPath0, tspan);
+      append_hydration(tspan, t0);
+      append_hydration(textPath0, t1);
+      append_hydration(text_1, textPath1);
+      append_hydration(textPath1, t2);
+    },
+    p(ctx2, dirty) {
+      var _a2, _b2, _c2, _d2, _e2, _f2;
+      if (dirty & 1 && path_d_value !== (path_d_value = ctx2[10](ctx2[17]))) {
+        attr(path2, "d", path_d_value);
+      }
+      if (dirty & 1 && path_id_value !== (path_id_value = ctx2[17].id)) {
+        attr(path2, "id", path_id_value);
+      }
+      if (dirty & 4) {
+        attr(path2, "stroke-width", ctx2[2]);
+      }
+      if (dirty & 2) {
+        attr(path2, "stroke", ctx2[1]);
+      }
+      if (dirty & 16) {
+        attr(path2, "stroke-opacity", ctx2[4]);
+      }
+      if (dirty & 1 && t0_value !== (t0_value = (((_c2 = (_b2 = (_a2 = ctx2[17]) == null ? void 0 : _a2.opts) == null ? void 0 : _b2.label) == null ? void 0 : _c2.enabled) ? (_f2 = (_e2 = (_d2 = ctx2[17]) == null ? void 0 : _d2.opts) == null ? void 0 : _e2.label) == null ? void 0 : _f2.value : "") + ""))
+        set_data(t0, t0_value);
+      if (dirty & 1 && textPath0_xlink_href_value !== (textPath0_xlink_href_value = "#" + ctx2[17].id)) {
+        xlink_attr(textPath0, "xlink:href", textPath0_xlink_href_value);
+      }
+      if (dirty & 128 && textPath0_startOffset_value !== (textPath0_startOffset_value = ctx2[7] + "%")) {
+        attr(textPath0, "startOffset", textPath0_startOffset_value);
+      }
+      if (dirty & 1 && textPath1_xlink_href_value !== (textPath1_xlink_href_value = "#" + ctx2[17].id)) {
+        xlink_attr(textPath1, "xlink:href", textPath1_xlink_href_value);
+      }
+      if (dirty & 256) {
+        attr(textPath1, "startOffset", ctx2[8]);
+      }
+      if (dirty & 8) {
+        attr(textPath1, "fill", ctx2[3]);
+      }
+      if (dirty & 16 && textPath1_opacity_value !== (textPath1_opacity_value = ctx2[4] * 1.3)) {
+        attr(textPath1, "opacity", textPath1_opacity_value);
+      }
+      if (dirty & 64) {
+        attr(g, "stroke", ctx2[6]);
+      }
+      if (dirty & 32) {
+        attr(g, "stroke-opacity", ctx2[5]);
+      }
+    },
+    d(detaching) {
+      if (detaching)
+        detach(g);
+    }
+  };
+}
+function create_each_block$1(ctx) {
+  let if_block_anchor;
+  let if_block = ctx[17] && ctx[9] && create_if_block_1$1(ctx);
+  return {
+    c() {
+      if (if_block)
+        if_block.c();
+      if_block_anchor = empty();
+    },
+    l(nodes) {
+      if (if_block)
+        if_block.l(nodes);
+      if_block_anchor = empty();
+    },
+    m(target, anchor) {
+      if (if_block)
+        if_block.m(target, anchor);
+      insert_hydration(target, if_block_anchor, anchor);
+    },
+    p(ctx2, dirty) {
+      if (ctx2[17] && ctx2[9]) {
+        if (if_block) {
+          if_block.p(ctx2, dirty);
+        } else {
+          if_block = create_if_block_1$1(ctx2);
+          if_block.c();
+          if_block.m(if_block_anchor.parentNode, if_block_anchor);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
+    },
+    d(detaching) {
+      if (if_block)
+        if_block.d(detaching);
+      if (detaching)
+        detach(if_block_anchor);
+    }
+  };
+}
+function create_fragment$3(ctx) {
+  let if_block_anchor;
+  let if_block = ctx[9] && ctx[0] && ctx[0].length > 0 && create_if_block$2(ctx);
+  return {
+    c() {
+      if (if_block)
+        if_block.c();
+      if_block_anchor = empty();
+    },
+    l(nodes) {
+      if (if_block)
+        if_block.l(nodes);
+      if_block_anchor = empty();
+    },
+    m(target, anchor) {
+      if (if_block)
+        if_block.m(target, anchor);
+      insert_hydration(target, if_block_anchor, anchor);
+    },
+    p(ctx2, [dirty]) {
+      if (ctx2[9] && ctx2[0] && ctx2[0].length > 0) {
+        if (if_block) {
+          if_block.p(ctx2, dirty);
+        } else {
+          if_block = create_if_block$2(ctx2);
+          if_block.c();
+          if_block.m(if_block_anchor.parentNode, if_block_anchor);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
+    },
+    i: noop$1,
+    o: noop$1,
+    d(detaching) {
+      if (if_block)
+        if_block.d(detaching);
+      if (detaching)
+        detach(if_block_anchor);
+    }
+  };
+}
+function instance$3($$self, $$props, $$invalidate) {
+  let { links } = $$props;
+  let { calcOffsetFromCanvas } = $$props;
+  let { strokeColor = "green" } = $$props;
+  let { strokeWidth = 1 } = $$props;
+  let { arrowColor = "green" } = $$props;
+  let { strokeOpacity = "0.3" } = $$props;
+  let { groupStrokeOpacity = "0.1" } = $$props;
+  let { groupStrokeColor = "white" } = $$props;
+  let { textStartOffset = 20 } = $$props;
+  let { arrowStartOffset = "40%" } = $$props;
+  const generateXcurve = link(bumpX);
+  let mounted;
+  let sourceX, sourceY, targetX, targetY;
+  onMount(() => {
+    $$invalidate(9, mounted = true);
+  });
+  function genPath(link2) {
+    let sourceEl = document.getElementById(link2.source.id);
+    let targetEl = document.getElementById(link2.target.id);
+    if (!sourceEl || !targetEl)
+      return;
+    const { x: sx, y: sy } = calcOffsetFromCanvas(sourceEl);
+    const { x: tx, y: ty } = calcOffsetFromCanvas(targetEl);
+    sourceX = sx + sourceEl.offsetWidth / 2;
+    sourceY = sy + sourceEl.offsetHeight / 2;
+    targetX = tx + targetEl.offsetWidth / 2;
+    targetY = ty + targetEl.offsetHeight / 2;
+    let d = generateXcurve({
+      source: [sourceX, sourceY],
+      target: [targetX, targetY]
+    });
+    return d;
+  }
+  $$self.$$set = ($$props2) => {
+    if ("links" in $$props2)
+      $$invalidate(0, links = $$props2.links);
+    if ("calcOffsetFromCanvas" in $$props2)
+      $$invalidate(11, calcOffsetFromCanvas = $$props2.calcOffsetFromCanvas);
+    if ("strokeColor" in $$props2)
+      $$invalidate(1, strokeColor = $$props2.strokeColor);
+    if ("strokeWidth" in $$props2)
+      $$invalidate(2, strokeWidth = $$props2.strokeWidth);
+    if ("arrowColor" in $$props2)
+      $$invalidate(3, arrowColor = $$props2.arrowColor);
+    if ("strokeOpacity" in $$props2)
+      $$invalidate(4, strokeOpacity = $$props2.strokeOpacity);
+    if ("groupStrokeOpacity" in $$props2)
+      $$invalidate(5, groupStrokeOpacity = $$props2.groupStrokeOpacity);
+    if ("groupStrokeColor" in $$props2)
+      $$invalidate(6, groupStrokeColor = $$props2.groupStrokeColor);
+    if ("textStartOffset" in $$props2)
+      $$invalidate(7, textStartOffset = $$props2.textStartOffset);
+    if ("arrowStartOffset" in $$props2)
+      $$invalidate(8, arrowStartOffset = $$props2.arrowStartOffset);
+  };
+  return [
+    links,
+    strokeColor,
+    strokeWidth,
+    arrowColor,
+    strokeOpacity,
+    groupStrokeOpacity,
+    groupStrokeColor,
+    textStartOffset,
+    arrowStartOffset,
+    mounted,
+    genPath,
+    calcOffsetFromCanvas
+  ];
+}
+class Links extends SvelteComponent {
+  constructor(options) {
+    super();
+    init(this, options, instance$3, create_fragment$3, safe_not_equal, {
+      links: 0,
+      calcOffsetFromCanvas: 11,
+      strokeColor: 1,
+      strokeWidth: 2,
+      arrowColor: 3,
+      strokeOpacity: 4,
+      groupStrokeOpacity: 5,
+      groupStrokeColor: 6,
+      textStartOffset: 7,
+      arrowStartOffset: 8
+    });
+  }
+}
+function create_if_block$1(ctx) {
+  let current;
+  const default_slot_template = ctx[7].default;
+  const default_slot = create_slot(default_slot_template, ctx, ctx[6], null);
+  const default_slot_or_fallback = default_slot || fallback_block$2(ctx);
+  return {
+    c() {
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.c();
+    },
+    l(nodes) {
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.l(nodes);
+    },
+    m(target, anchor) {
+      if (default_slot_or_fallback) {
+        default_slot_or_fallback.m(target, anchor);
+      }
+      current = true;
+    },
+    p(ctx2, dirty) {
+      if (default_slot) {
+        if (default_slot.p && (!current || dirty & 64)) {
+          update_slot_base(
+            default_slot,
+            default_slot_template,
+            ctx2,
+            ctx2[6],
+            !current ? get_all_dirty_from_scope(ctx2[6]) : get_slot_changes(default_slot_template, ctx2[6], dirty, null),
+            null
+          );
+        }
+      } else {
+        if (default_slot_or_fallback && default_slot_or_fallback.p && (!current || dirty & 4)) {
+          default_slot_or_fallback.p(ctx2, !current ? -1 : dirty);
+        }
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(default_slot_or_fallback, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(default_slot_or_fallback, local);
+      current = false;
+    },
+    d(detaching) {
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.d(detaching);
+    }
+  };
+}
+function fallback_block$2(ctx) {
+  let div;
+  let div_class_value;
+  return {
+    c() {
+      div = element("div");
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { style: true, class: true });
+      children(div).forEach(detach);
+      this.h();
+    },
+    h() {
+      set_style(div, "transform", "translate(-50%, -50%)");
+      attr(div, "class", div_class_value = "absolute border-[" + (ctx[2] + "em") + "] md:border-[" + (ctx[2] / 2 + "em") + "] border-yellow-200/40 ring-2 ring-black h-0 w-0 rounded-full");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+    },
+    p(ctx2, dirty) {
+      if (dirty & 4 && div_class_value !== (div_class_value = "absolute border-[" + (ctx2[2] + "em") + "] md:border-[" + (ctx2[2] / 2 + "em") + "] border-yellow-200/40 ring-2 ring-black h-0 w-0 rounded-full")) {
+        attr(div, "class", div_class_value);
+      }
+    },
+    d(detaching) {
+      if (detaching)
+        detach(div);
+    }
+  };
+}
+function create_fragment$2(ctx) {
+  let div;
+  let div_id_value;
+  let div_class_value;
+  let current;
+  let mounted;
+  let dispose;
+  let if_block = ctx[0] && create_if_block$1(ctx);
+  return {
+    c() {
+      div = element("div");
+      if (if_block)
+        if_block.c();
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", {
+        id: true,
+        "data-highlighter": true,
+        class: true,
+        style: true
+      });
+      var div_nodes = children(div);
+      if (if_block)
+        if_block.l(div_nodes);
+      div_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "id", div_id_value = ctx[1].id + "--highlighter");
+      attr(div, "data-highlighter", "true");
+      attr(div, "class", div_class_value = "absolute border-[" + (ctx[2] + "em") + "] md:border-[" + (ctx[2] / 2 + "em") + "] border-transparent rounded-full p-0 m-0");
+      set_style(div, "top", ctx[5] + "px");
+      set_style(div, "left", ctx[4] + "px");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+      if (if_block)
+        if_block.m(div, null);
+      ctx[9](div);
+      current = true;
+      if (!mounted) {
+        dispose = [
+          listen(window, "resize", ctx[8]),
+          listen(div, "mouseover", ctx[10]),
+          listen(div, "mouseleave", ctx[11]),
+          listen(div, "focus", ctx[12]),
+          listen(div, "blur", ctx[13])
+        ];
+        mounted = true;
+      }
+    },
+    p(ctx2, [dirty]) {
+      if (ctx2[0]) {
+        if (if_block) {
+          if_block.p(ctx2, dirty);
+          if (dirty & 1) {
+            transition_in(if_block, 1);
+          }
+        } else {
+          if_block = create_if_block$1(ctx2);
+          if_block.c();
+          transition_in(if_block, 1);
+          if_block.m(div, null);
+        }
+      } else if (if_block) {
+        group_outros();
+        transition_out(if_block, 1, 1, () => {
+          if_block = null;
+        });
+        check_outros();
+      }
+      if (!current || dirty & 2 && div_id_value !== (div_id_value = ctx2[1].id + "--highlighter")) {
+        attr(div, "id", div_id_value);
+      }
+      if (!current || dirty & 4 && div_class_value !== (div_class_value = "absolute border-[" + (ctx2[2] + "em") + "] md:border-[" + (ctx2[2] / 2 + "em") + "] border-transparent rounded-full p-0 m-0")) {
+        attr(div, "class", div_class_value);
+      }
+      if (!current || dirty & 32) {
+        set_style(div, "top", ctx2[5] + "px");
+      }
+      if (!current || dirty & 16) {
+        set_style(div, "left", ctx2[4] + "px");
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(if_block);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching)
+        detach(div);
+      if (if_block)
+        if_block.d();
+      ctx[9](null);
+      mounted = false;
+      run_all(dispose);
+    }
+  };
+}
+function instance$2($$self, $$props, $$invalidate) {
+  let top;
+  let left;
+  let { $$slots: slots = {}, $$scope } = $$props;
+  let { node } = $$props;
+  let { zoneSize = 2 } = $$props;
+  let { highlight = false } = $$props;
+  let dot;
+  const resize_handler = (e) => {
+    $$invalidate(5, top), $$invalidate(3, dot), $$invalidate(1, node);
+    $$invalidate(4, left), $$invalidate(3, dot), $$invalidate(1, node);
+  };
+  function div_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      dot = $$value;
+      $$invalidate(3, dot);
+    });
+  }
+  const mouseover_handler = (e) => {
+    $$invalidate(0, highlight = true);
+  };
+  const mouseleave_handler = (e) => {
+    $$invalidate(0, highlight = false);
+  };
+  const focus_handler = (e) => {
+    $$invalidate(0, highlight = true);
+  };
+  const blur_handler = (e) => {
+    $$invalidate(0, highlight = false);
+  };
+  $$self.$$set = ($$props2) => {
+    if ("node" in $$props2)
+      $$invalidate(1, node = $$props2.node);
+    if ("zoneSize" in $$props2)
+      $$invalidate(2, zoneSize = $$props2.zoneSize);
+    if ("highlight" in $$props2)
+      $$invalidate(0, highlight = $$props2.highlight);
+    if ("$$scope" in $$props2)
+      $$invalidate(6, $$scope = $$props2.$$scope);
+  };
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & 10) {
+      $$invalidate(5, top = dot ? -dot.offsetHeight / 2 + node.offsetHeight / 2 : 0);
+    }
+    if ($$self.$$.dirty & 10) {
+      $$invalidate(4, left = dot ? -dot.offsetWidth / 2 + node.offsetWidth / 2 : 0);
+    }
+    if ($$self.$$.dirty & 10) {
+      if (dot)
+        node.insertAdjacentElement("beforeend", dot);
+    }
+  };
+  return [
+    highlight,
+    node,
+    zoneSize,
+    dot,
+    left,
+    top,
+    $$scope,
+    slots,
+    resize_handler,
+    div_binding,
+    mouseover_handler,
+    mouseleave_handler,
+    focus_handler,
+    blur_handler
+  ];
+}
+class Highlighter extends SvelteComponent {
+  constructor(options) {
+    super();
+    init(this, options, instance$2, create_fragment$2, safe_not_equal, { node: 1, zoneSize: 2, highlight: 0 });
+  }
+}
+const Highlighter$1 = Highlighter;
+const generateLinkLabel = (nodes, sourceID, targetID = false) => {
+  const match = nodes.find((el) => el.id == sourceID);
+  if (!match || !match.value)
+    return "";
+  if (!targetID)
+    return match.value + " to";
+  const match2 = nodes.find((el) => el.id == targetID);
+  if (!match2)
+    return match.value;
+  return `${match.value} to ${match2.value}`;
+};
+const { window: window_1 } = globals;
+function get_each_context(ctx, list, i) {
+  const child_ctx = ctx.slice();
+  child_ctx[18] = list[i][0];
+  child_ctx[19] = list[i][1].node;
+  child_ctx[20] = list[i][1].highlight;
+  return child_ctx;
+}
+const get_default_slot_changes = (dirty) => ({});
+const get_default_slot_context = (ctx) => ({ connectable: ctx[10] });
+const get_marker_slot_changes = (dirty) => ({});
+const get_marker_slot_context = (ctx) => ({ connectable: ctx[10] });
+function create_if_block_1(ctx) {
+  let cursormarker;
+  let updating_marker;
+  let current;
+  function cursormarker_marker_binding(value) {
+    ctx[13](value);
+  }
+  let cursormarker_props = {
+    left: ctx[7],
+    top: ctx[8],
+    id: MARKER,
+    $$slots: { default: [create_default_slot] },
+    $$scope: { ctx }
+  };
+  if (ctx[5] !== void 0) {
+    cursormarker_props.marker = ctx[5];
+  }
+  cursormarker = new CursorMarker({ props: cursormarker_props });
+  binding_callbacks.push(() => bind(cursormarker, "marker", cursormarker_marker_binding));
+  return {
+    c() {
+      create_component(cursormarker.$$.fragment);
+    },
+    l(nodes) {
+      claim_component(cursormarker.$$.fragment, nodes);
+    },
+    m(target, anchor) {
+      mount_component(cursormarker, target, anchor);
+      current = true;
+    },
+    p(ctx2, dirty) {
+      const cursormarker_changes = {};
+      if (dirty & 128)
+        cursormarker_changes.left = ctx2[7];
+      if (dirty & 256)
+        cursormarker_changes.top = ctx2[8];
+      if (dirty & 32768) {
+        cursormarker_changes.$$scope = { dirty, ctx: ctx2 };
+      }
+      if (!updating_marker && dirty & 32) {
+        updating_marker = true;
+        cursormarker_changes.marker = ctx2[5];
+        add_flush_callback(() => updating_marker = false);
+      }
+      cursormarker.$set(cursormarker_changes);
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(cursormarker.$$.fragment, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(cursormarker.$$.fragment, local);
+      current = false;
+    },
+    d(detaching) {
+      destroy_component(cursormarker, detaching);
+    }
+  };
+}
+function fallback_block$1(ctx) {
+  let div;
+  return {
+    c() {
+      div = element("div");
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      children(div).forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "class", "h-32 w-32 md:h-16 md:w-16 p-8 rounded-full shadow-xl opacity-80 select-none border-[4em] md:border-[2em] ");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+    },
+    p: noop$1,
+    d(detaching) {
+      if (detaching)
+        detach(div);
+    }
+  };
+}
+function create_default_slot(ctx) {
+  let current;
+  const marker_slot_template = ctx[11].marker;
+  const marker_slot = create_slot(marker_slot_template, ctx, ctx[15], get_marker_slot_context);
+  const marker_slot_or_fallback = marker_slot || fallback_block$1();
+  return {
+    c() {
+      if (marker_slot_or_fallback)
+        marker_slot_or_fallback.c();
+    },
+    l(nodes) {
+      if (marker_slot_or_fallback)
+        marker_slot_or_fallback.l(nodes);
+    },
+    m(target, anchor) {
+      if (marker_slot_or_fallback) {
+        marker_slot_or_fallback.m(target, anchor);
+      }
+      current = true;
+    },
+    p(ctx2, dirty) {
+      if (marker_slot) {
+        if (marker_slot.p && (!current || dirty & 32768)) {
+          update_slot_base(
+            marker_slot,
+            marker_slot_template,
+            ctx2,
+            ctx2[15],
+            !current ? get_all_dirty_from_scope(ctx2[15]) : get_slot_changes(marker_slot_template, ctx2[15], dirty, get_marker_slot_changes),
+            get_marker_slot_context
+          );
+        }
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(marker_slot_or_fallback, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(marker_slot_or_fallback, local);
+      current = false;
+    },
+    d(detaching) {
+      if (marker_slot_or_fallback)
+        marker_slot_or_fallback.d(detaching);
+    }
+  };
+}
+function create_if_block(ctx) {
+  let current;
+  const default_slot_template = ctx[11].default;
+  const default_slot = create_slot(default_slot_template, ctx, ctx[15], get_default_slot_context);
+  return {
+    c() {
+      if (default_slot)
+        default_slot.c();
+    },
+    l(nodes) {
+      if (default_slot)
+        default_slot.l(nodes);
+    },
+    m(target, anchor) {
+      if (default_slot) {
+        default_slot.m(target, anchor);
+      }
+      current = true;
+    },
+    p(ctx2, dirty) {
+      if (default_slot) {
+        if (default_slot.p && (!current || dirty & 32768)) {
+          update_slot_base(
+            default_slot,
+            default_slot_template,
+            ctx2,
+            ctx2[15],
+            !current ? get_all_dirty_from_scope(ctx2[15]) : get_slot_changes(default_slot_template, ctx2[15], dirty, get_default_slot_changes),
+            get_default_slot_context
+          );
+        }
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(default_slot, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(default_slot, local);
+      current = false;
+    },
+    d(detaching) {
+      if (default_slot)
+        default_slot.d(detaching);
+    }
+  };
+}
+function create_each_block(ctx) {
+  let highlighter;
+  let current;
+  highlighter = new Highlighter$1({
+    props: {
+      node: ctx[19],
+      highlight: ctx[20]
+    }
+  });
+  return {
+    c() {
+      create_component(highlighter.$$.fragment);
+    },
+    l(nodes) {
+      claim_component(highlighter.$$.fragment, nodes);
+    },
+    m(target, anchor) {
+      mount_component(highlighter, target, anchor);
+      current = true;
+    },
+    p(ctx2, dirty) {
+      const highlighter_changes = {};
+      if (dirty & 4)
+        highlighter_changes.node = ctx2[19];
+      if (dirty & 4)
+        highlighter_changes.highlight = ctx2[20];
+      highlighter.$set(highlighter_changes);
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(highlighter.$$.fragment, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(highlighter.$$.fragment, local);
+      current = false;
+    },
+    d(detaching) {
+      destroy_component(highlighter, detaching);
+    }
+  };
+}
+function create_fragment$1(ctx) {
+  var _a, _b;
+  let div;
+  let t0;
+  let t1;
+  let links0;
+  let t2;
+  let links1;
+  let t3;
+  let current;
+  let mounted;
+  let dispose;
+  let if_block0 = ctx[4] && create_if_block_1(ctx);
+  let if_block1 = ctx[3] && create_if_block(ctx);
+  const links0_spread_levels = [
+    { links: [ctx[6]] },
+    {
+      calcOffsetFromCanvas: ctx[9]
+    },
+    (_a = ctx[1]) == null ? void 0 : _a.links
+  ];
+  let links0_props = {};
+  for (let i = 0; i < links0_spread_levels.length; i += 1) {
+    links0_props = assign(links0_props, links0_spread_levels[i]);
+  }
+  links0 = new Links({ props: links0_props });
+  const links1_spread_levels = [
+    { links: ctx[0].links },
+    {
+      calcOffsetFromCanvas: ctx[9]
+    },
+    (_b = ctx[1]) == null ? void 0 : _b.links
+  ];
+  let links1_props = {};
+  for (let i = 0; i < links1_spread_levels.length; i += 1) {
+    links1_props = assign(links1_props, links1_spread_levels[i]);
+  }
+  links1 = new Links({ props: links1_props });
+  let each_value = [...Object.entries(ctx[2])];
+  let each_blocks = [];
+  for (let i = 0; i < each_value.length; i += 1) {
+    each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+  }
+  const out = (i) => transition_out(each_blocks[i], 1, 1, () => {
+    each_blocks[i] = null;
+  });
+  return {
+    c() {
+      div = element("div");
+      if (if_block0)
+        if_block0.c();
+      t0 = space();
+      if (if_block1)
+        if_block1.c();
+      t1 = space();
+      create_component(links0.$$.fragment);
+      t2 = space();
+      create_component(links1.$$.fragment);
+      t3 = space();
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].c();
+      }
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      var div_nodes = children(div);
+      if (if_block0)
+        if_block0.l(div_nodes);
+      t0 = claim_space(div_nodes);
+      if (if_block1)
+        if_block1.l(div_nodes);
+      t1 = claim_space(div_nodes);
+      claim_component(links0.$$.fragment, div_nodes);
+      t2 = claim_space(div_nodes);
+      claim_component(links1.$$.fragment, div_nodes);
+      t3 = claim_space(div_nodes);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].l(div_nodes);
+      }
+      div_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "class", "relative");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+      if (if_block0)
+        if_block0.m(div, null);
+      append_hydration(div, t0);
+      if (if_block1)
+        if_block1.m(div, null);
+      append_hydration(div, t1);
+      mount_component(links0, div, null);
+      append_hydration(div, t2);
+      mount_component(links1, div, null);
+      append_hydration(div, t3);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].m(div, null);
+      }
+      ctx[14](div);
+      current = true;
+      if (!mounted) {
+        dispose = listen(window_1, "resize", ctx[12]);
+        mounted = true;
+      }
+    },
+    p(ctx2, [dirty]) {
+      var _a2, _b2;
+      if (ctx2[4]) {
+        if (if_block0) {
+          if_block0.p(ctx2, dirty);
+          if (dirty & 16) {
+            transition_in(if_block0, 1);
+          }
+        } else {
+          if_block0 = create_if_block_1(ctx2);
+          if_block0.c();
+          transition_in(if_block0, 1);
+          if_block0.m(div, t0);
+        }
+      } else if (if_block0) {
+        group_outros();
+        transition_out(if_block0, 1, 1, () => {
+          if_block0 = null;
+        });
+        check_outros();
+      }
+      if (ctx2[3]) {
+        if (if_block1) {
+          if_block1.p(ctx2, dirty);
+          if (dirty & 8) {
+            transition_in(if_block1, 1);
+          }
+        } else {
+          if_block1 = create_if_block(ctx2);
+          if_block1.c();
+          transition_in(if_block1, 1);
+          if_block1.m(div, t1);
+        }
+      } else if (if_block1) {
+        group_outros();
+        transition_out(if_block1, 1, 1, () => {
+          if_block1 = null;
+        });
+        check_outros();
+      }
+      const links0_changes = dirty & 578 ? get_spread_update(links0_spread_levels, [
+        dirty & 64 && { links: [ctx2[6]] },
+        dirty & 512 && {
+          calcOffsetFromCanvas: ctx2[9]
+        },
+        dirty & 2 && get_spread_object((_a2 = ctx2[1]) == null ? void 0 : _a2.links)
+      ]) : {};
+      links0.$set(links0_changes);
+      const links1_changes = dirty & 515 ? get_spread_update(links1_spread_levels, [
+        dirty & 1 && { links: ctx2[0].links },
+        dirty & 512 && {
+          calcOffsetFromCanvas: ctx2[9]
+        },
+        dirty & 2 && get_spread_object((_b2 = ctx2[1]) == null ? void 0 : _b2.links)
+      ]) : {};
+      links1.$set(links1_changes);
+      if (dirty & 4) {
+        each_value = [...Object.entries(ctx2[2])];
+        let i;
+        for (i = 0; i < each_value.length; i += 1) {
+          const child_ctx = get_each_context(ctx2, each_value, i);
+          if (each_blocks[i]) {
+            each_blocks[i].p(child_ctx, dirty);
+            transition_in(each_blocks[i], 1);
+          } else {
+            each_blocks[i] = create_each_block(child_ctx);
+            each_blocks[i].c();
+            transition_in(each_blocks[i], 1);
+            each_blocks[i].m(div, null);
+          }
+        }
+        group_outros();
+        for (i = each_value.length; i < each_blocks.length; i += 1) {
+          out(i);
+        }
+        check_outros();
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(if_block0);
+      transition_in(if_block1);
+      transition_in(links0.$$.fragment, local);
+      transition_in(links1.$$.fragment, local);
+      for (let i = 0; i < each_value.length; i += 1) {
+        transition_in(each_blocks[i]);
+      }
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block0);
+      transition_out(if_block1);
+      transition_out(links0.$$.fragment, local);
+      transition_out(links1.$$.fragment, local);
+      each_blocks = each_blocks.filter(Boolean);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        transition_out(each_blocks[i]);
+      }
+      current = false;
+    },
+    d(detaching) {
+      if (detaching)
+        detach(div);
+      if (if_block0)
+        if_block0.d();
+      if (if_block1)
+        if_block1.d();
+      destroy_component(links0);
+      destroy_component(links1);
+      destroy_each(each_blocks, detaching);
+      ctx[14](null);
+      mounted = false;
+      dispose();
+    }
+  };
+}
+const MARKER = "marker";
+function instance$1($$self, $$props, $$invalidate) {
+  let { $$slots: slots = {}, $$scope } = $$props;
+  let { data } = $$props;
+  let { opts = {} } = $$props;
+  const dispatch = createEventDispatcher();
+  let highlighters = {};
+  let canvas;
+  let connecting;
+  let marker;
+  let tempLink = null;
+  let left = 0;
+  let top = 0;
+  function handler(p, e) {
+    e.stopPropagation();
+    e.preventDefault();
+    $$invalidate(7, left = p.pageX - canvas.offsetLeft);
+    $$invalidate(8, top = p.pageY - canvas.offsetTop);
+  }
+  function calcOffsetFromCanvas(child) {
+    if (!child)
+      return;
+    if (child == canvas)
+      return { x: child.offsetLeft, y: child.offsetTop };
+    let sourceOffsetTop = child.getBoundingClientRect().top;
+    let canvasOffsetTop = canvas.getBoundingClientRect().top;
+    let sourceOffsetTopDiff = sourceOffsetTop - canvasOffsetTop;
+    let sourceOffsetLeft = child.getBoundingClientRect().left;
+    let canvasOffsetLeft = canvas.getBoundingClientRect().left;
+    let sourceOffsetLeftDiff = sourceOffsetLeft - canvasOffsetLeft;
+    return {
+      x: sourceOffsetLeftDiff,
+      y: sourceOffsetTopDiff
+    };
+  }
+  function connectable(node, options) {
+    var _a, _b;
+    if (!node.id)
+      node.id = nanoid();
+    if (!node.style.position)
+      node.style.position = "relative";
+    let highlight = false;
+    let overZone;
+    $$invalidate(2, highlighters[node.id] = { node, highlight }, highlighters);
+    let pointerTracker;
+    if (options == null ? void 0 : options.dataset)
+      node.dataset.dataset = JSON.stringify(options.dataset);
+    if (!((_a = options == null ? void 0 : options.restrictions) == null ? void 0 : _a.startOnly))
+      node.dataset.dropzone = true;
+    if (!((_b = options == null ? void 0 : options.restrictions) == null ? void 0 : _b.dropOnly))
+      pointerTracker = new PointerTracker(
+        node,
+        {
+          start(pointer, event) {
+            if (pointerTracker.currentPointers.length === 1)
+              return false;
+            $$invalidate(4, connecting = true);
+            handler(pointer, event);
+            return true;
+          },
+          move(previousPointers, changedPointers, event) {
+            var _a2;
+            handler(pointerTracker.currentPointers[0], event);
+            $$invalidate(6, tempLink = {
+              id: node.id + "-to-",
+              source: { id: node.id },
+              target: { id: MARKER },
+              opts: {
+                label: {
+                  enabled: true,
+                  value: generateLinkLabel(data.nodes, node.id)
+                }
+              }
+            });
+            if (overZone)
+              $$invalidate(2, highlighters[overZone.id].highlight = false, highlighters);
+            overZone = ((_a2 = document.elementFromPoint(pointerTracker.currentPointers[0].clientX, pointerTracker.currentPointers[0].clientY)) == null ? void 0 : _a2.closest(`[data-dropzone]`)) || null;
+            if (overZone == null ? void 0 : overZone.id) {
+              $$invalidate(2, highlighters[overZone.id].highlight = true, highlighters);
+            }
+          },
+          end: (pointer, event, cancelled) => {
+            var _a2, _b2;
+            $$invalidate(5, marker.style.display = "none", marker);
+            $$invalidate(4, connecting = false);
+            if (highlighters && overZone && overZone.id && highlighters[overZone.id].highlight) {
+              $$invalidate(2, highlighters[overZone.id].highlight = false, highlighters);
+            }
+            overZone = null;
+            let drop = document.elementFromPoint(pointer.clientX, pointer.clientY);
+            let zone = drop.closest(`[data-dropzone]`);
+            $$invalidate(6, tempLink = null);
+            if (!zone || !(zone == null ? void 0 : zone.id) || !node || !(node == null ? void 0 : node.id))
+              return;
+            const newLink = {
+              id: node.id + "-to-" + zone.id,
+              source: { id: node.id },
+              target: { id: zone.id },
+              opts: {
+                label: {
+                  enabled: true,
+                  value: generateLinkLabel(data.nodes, node.id, zone.id)
+                }
+              }
+            };
+            console.log({ newLink });
+            $$invalidate(0, data.links = [...data.links, newLink], data);
+            if ((options == null ? void 0 : options.dataset) || ((_a2 = zone == null ? void 0 : zone.dataset) == null ? void 0 : _a2.dataset)) {
+              const detail = {
+                source: { dataset: (options == null ? void 0 : options.dataset) || null },
+                target: {
+                  dataset: ((_b2 = zone == null ? void 0 : zone.dataset) == null ? void 0 : _b2.dataset) ? JSON.parse(zone.dataset.dataset) : null
+                }
+              };
+              console.log(detail);
+              dispatch("connected", detail);
+            }
+          },
+          avoidPointerEvents: true,
+          eventListenerOptions: { capture: true, passive: false }
+        }
+      );
+    return {
+      update(params) {
+      },
+      destroy() {
+      }
+    };
+  }
+  const resize_handler = (e) => {
+    $$invalidate(0, data);
+  };
+  function cursormarker_marker_binding(value) {
+    marker = value;
+    $$invalidate(5, marker);
+  }
+  function div_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      canvas = $$value;
+      $$invalidate(3, canvas);
+    });
+  }
+  $$self.$$set = ($$props2) => {
+    if ("data" in $$props2)
+      $$invalidate(0, data = $$props2.data);
+    if ("opts" in $$props2)
+      $$invalidate(1, opts = $$props2.opts);
+    if ("$$scope" in $$props2)
+      $$invalidate(15, $$scope = $$props2.$$scope);
+  };
+  return [
+    data,
+    opts,
+    highlighters,
+    canvas,
+    connecting,
+    marker,
+    tempLink,
+    left,
+    top,
+    calcOffsetFromCanvas,
+    connectable,
+    slots,
+    resize_handler,
+    cursormarker_marker_binding,
+    div_binding,
+    $$scope
+  ];
+}
+class Canvas extends SvelteComponent {
+  constructor(options) {
+    super();
+    init(this, options, instance$1, create_fragment$1, safe_not_equal, { data: 0, opts: 1 });
+  }
+}
+const Canvas$1 = Canvas;
+function fallback_block(ctx) {
+  let div;
+  return {
+    c() {
+      div = element("div");
+      this.h();
+    },
+    l(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      children(div).forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div, "class", "flex h-4 w-4 border-2 bg-blue-500 rounded-full border-blue-300 hover:ring hover:ring-blue-800");
+    },
+    m(target, anchor) {
+      insert_hydration(target, div, anchor);
+    },
+    p: noop$1,
+    d(detaching) {
+      if (detaching)
+        detach(div);
+    }
+  };
+}
+function create_fragment(ctx) {
+  let div1;
+  let div0;
+  let connectable_action;
+  let div1_style_value;
+  let div1_resize_listener;
+  let current;
+  let mounted;
+  let dispose;
+  const default_slot_template = ctx[11].default;
+  const default_slot = create_slot(default_slot_template, ctx, ctx[10], null);
+  const default_slot_or_fallback = default_slot || fallback_block();
+  return {
+    c() {
+      div1 = element("div");
+      div0 = element("div");
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.c();
+      this.h();
+    },
+    l(nodes) {
+      div1 = claim_element(nodes, "DIV", { class: true, style: true });
+      var div1_nodes = children(div1);
+      div0 = claim_element(div1_nodes, "DIV", { class: true });
+      var div0_nodes = children(div0);
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.l(div0_nodes);
+      div0_nodes.forEach(detach);
+      div1_nodes.forEach(detach);
+      this.h();
+    },
+    h() {
+      attr(div0, "class", "relative");
+      attr(div1, "class", "flex absolute EndPoint");
+      attr(div1, "style", div1_style_value = "top: " + ctx[8] + "px; " + (ctx[0] == "right" ? `right: ${ctx[7]}px;` : `left: ${ctx[6]}px;`));
+      add_render_callback(() => ctx[14].call(div1));
+    },
+    m(target, anchor) {
+      insert_hydration(target, div1, anchor);
+      append_hydration(div1, div0);
+      if (default_slot_or_fallback) {
+        default_slot_or_fallback.m(div0, null);
+      }
+      ctx[13](div1);
+      div1_resize_listener = add_resize_listener(div1, ctx[14].bind(div1));
+      current = true;
+      if (!mounted) {
+        dispose = [
+          listen(window, "resize", ctx[12]),
+          action_destroyer(connectable_action = ctx[1].call(null, div0, ctx[2]))
+        ];
+        mounted = true;
+      }
+    },
+    p(ctx2, [dirty]) {
+      if (default_slot) {
+        if (default_slot.p && (!current || dirty & 1024)) {
+          update_slot_base(
+            default_slot,
+            default_slot_template,
+            ctx2,
+            ctx2[10],
+            !current ? get_all_dirty_from_scope(ctx2[10]) : get_slot_changes(default_slot_template, ctx2[10], dirty, null),
+            null
+          );
+        }
+      }
+      if (connectable_action && is_function(connectable_action.update) && dirty & 4)
+        connectable_action.update.call(null, ctx2[2]);
+      if (!current || dirty & 449 && div1_style_value !== (div1_style_value = "top: " + ctx2[8] + "px; " + (ctx2[0] == "right" ? `right: ${ctx2[7]}px;` : `left: ${ctx2[6]}px;`))) {
+        attr(div1, "style", div1_style_value);
+      }
+    },
+    i(local) {
+      if (current)
+        return;
+      transition_in(default_slot_or_fallback, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(default_slot_or_fallback, local);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching)
+        detach(div1);
+      if (default_slot_or_fallback)
+        default_slot_or_fallback.d(detaching);
+      ctx[13](null);
+      div1_resize_listener();
+      mounted = false;
+      run_all(dispose);
+    }
+  };
+}
+function instance($$self, $$props, $$invalidate) {
+  let top;
+  let right;
+  let left;
+  let { $$slots: slots = {}, $$scope } = $$props;
+  let { position = "right" } = $$props;
+  let { connectable } = $$props;
+  let { options = {} } = $$props;
+  let dot;
+  let offsetHeight, offsetWidth, parentHeight;
+  const resize_handler = (e) => {
+    $$invalidate(8, top), $$invalidate(9, parentHeight), $$invalidate(4, offsetHeight), $$invalidate(3, dot);
+    $$invalidate(6, left), $$invalidate(5, offsetWidth);
+    $$invalidate(7, right), $$invalidate(5, offsetWidth);
+  };
+  function div1_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      dot = $$value;
+      $$invalidate(3, dot);
+    });
+  }
+  function div1_elementresize_handler() {
+    offsetWidth = this.offsetWidth;
+    offsetHeight = this.offsetHeight;
+    $$invalidate(5, offsetWidth);
+    $$invalidate(4, offsetHeight);
+  }
+  $$self.$$set = ($$props2) => {
+    if ("position" in $$props2)
+      $$invalidate(0, position = $$props2.position);
+    if ("connectable" in $$props2)
+      $$invalidate(1, connectable = $$props2.connectable);
+    if ("options" in $$props2)
+      $$invalidate(2, options = $$props2.options);
+    if ("$$scope" in $$props2)
+      $$invalidate(10, $$scope = $$props2.$$scope);
+  };
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & 8) {
+      if (dot) {
+        $$invalidate(3, dot.parentNode.style.position = "relative", dot);
+        $$invalidate(9, parentHeight = dot.parentNode.offsetHeight);
+      }
+    }
+    if ($$self.$$.dirty & 528) {
+      $$invalidate(8, top = parentHeight && offsetHeight ? parentHeight / 2 - offsetHeight / 2 : 0);
+    }
+    if ($$self.$$.dirty & 32) {
+      $$invalidate(7, right = offsetWidth ? -offsetWidth / 2 : 0);
+    }
+    if ($$self.$$.dirty & 32) {
+      $$invalidate(6, left = offsetWidth ? -offsetWidth / 2 : 0);
+    }
+  };
+  return [
+    position,
+    connectable,
+    options,
+    dot,
+    offsetHeight,
+    offsetWidth,
+    left,
+    right,
+    top,
+    parentHeight,
+    $$scope,
+    slots,
+    resize_handler,
+    div1_binding,
+    div1_elementresize_handler
+  ];
+}
+class EndPoint extends SvelteComponent {
+  constructor(options) {
+    super();
+    init(this, options, instance, create_fragment, safe_not_equal, { position: 0, connectable: 1, options: 2 });
+  }
+}
+const EndPoint$1 = EndPoint;
+export {
+  Canvas$1 as Canvas,
+  EndPoint$1 as EndPoint,
+  Highlighter$1 as Highlighter,
+  generateLinkLabel
+};
+//# sourceMappingURL=index-f780e9b1.js.map
